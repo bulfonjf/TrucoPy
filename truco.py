@@ -46,29 +46,27 @@ class Carta:
     Palo: str
     Nombre: str
 
+    # STR y REPR son cuando alguien hace print(carta) se muestre solo el nombre y el palo (con un espacio en el medio)
     def __str__(self):
         return "{} {}".format(self.Nombre, self.Palo)
     
     def __repr__(self):
         return "{} {}".format(self.Nombre, self.Palo)
 
+    # GT, GE, LT, LE, son las comparaciones >,>=,<,<=, asi podemos comparar matematicamente dos cartas (ej, carta1 > carta 2)
+
+    # Mayor
     def __gt__(self, other):
         return self.Valor > other.Valor
-
+    # Mayor o igual
     def __ge__(self, other):
         return self.Valor >= other.Valor
-
+    # Menor o igual
     def __lt__(self, other):
         return self.Valor < other.Valor
-
+    # Menor o igual
     def __le__(self,other):
         return self.Valor <= other.Valor
-
-    def __eq__(self, other):
-        return self.Valor == other.Valor
-    
-    def __ne__(self, other):
-        return self.Valor != other.Valor
 
 @dataclass
 class Mazo:
@@ -102,7 +100,7 @@ class Partida:
         print("Estas creando una partida nueva")
         print("Ingresa el nombre del jugador 1")
         nombreJugador1 = input()
-        print("Ingresa el nombre del jugador 2")
+        print("Ingresa el nombre del jugador 2. No seas pete y pone un nombre distinto, sino va a fallar")
         nombreJugador2 = input()
 
         self.Jugador1 = Jugador(nombreJugador1, "Azul", Mano())
@@ -131,15 +129,19 @@ class Partida:
 class Ronda:
     Mazo: "Mazo" = Mazo()
     # Jugador1: "Jugador" 
-    # Jugador2: "Jugador"swww
+    # Jugador2: "Jugador"
 
     # - Al comenzar la ronda, generar un nuevo mazo
     # - Asignarle las cartas a los jugadores
     def iniciar(self, jugador1: "Jugador", jugador2: "Jugador"):
+        
         self.Mazo = Mazo()
+        
         jugador1.Mano.Cartas.clear()
         jugador2.Mano.Cartas.clear()
-        for x in range(3):
+        
+        # Este codigo se ejectua 3 veces
+        for _ in range(3):
             # opcion A
             # self.repartirJugador1(jugador1)
             # o, la opcion B    
@@ -149,31 +151,118 @@ class Ronda:
         # mostar las cartas de cada jugador (opcion B)
         jugador1.mostrarCartas()
         jugador2.mostrarCartas()
-
-        # Turno Jugador 1
-        turno1 = Turno()
-        cartaJugadaJugador1 = turno1.iniciar(jugador1)
-
-        # Turno Jugador 2
-        cartaJugadaJugador2 = turno1.iniciar(jugador2)
-
-        ganadorJugada = None
-        if(cartaJugadaJugador1 >= cartaJugadaJugador2):
-            ganadorJugada = jugador1
-        else:
-            ganadorJugada = jugador2
-
-        print("Gano {}".format(ganadorJugada.Nombre))
-
-    # - Al terminar la ronda devolver o retornar los puntajes de los jugadores
-    # def terminar(self):
+    
+        # creamos dos variables de tipo entero (int), ambas inicializadas en 0
+        contadortrucojugador1, contadortrucojugador2 = 0,0
         
+    # --------- PRIMER TURNO DE AMBOS JUGADORES
+        # Turno Jugador A
+        cartaJugadaJugadorA = Turno().iniciar(jugador1)
 
+        # Turno Jugador B
+        cartaJugadaJugadorB = Turno().iniciar(jugador2)
 
+        # Comparar las cartas jugadas para saber quien gano esa jugada
+        ganadorJugada1 = None
+        perdedorJugada1 = None
+        
+        hayGanador = False
+
+        if(cartaJugadaJugadorA > cartaJugadaJugadorB):
+            ganadorJugada1 = jugador1
+            perdedorJugada1 = jugador2
+            contadortrucojugador1 += 1
+        elif(cartaJugadaJugadorA < cartaJugadaJugadorB):
+            ganadorJugada1 = jugador2
+            perdedorJugada1 = jugador1
+            contadortrucojugador2 += 1
+        else:
+            ganadorJugada1 = jugador1
+            perdedorJugada1 = jugador2
+            
+        print("Gano {}".format(ganadorJugada1.Nombre))
+      
+    # --------- SEGUNDO TURNO DE AMBOS JUGADORES  
+        # Turno Jugador A
+        cartaJugadaJugadorA = Turno().iniciar(ganadorJugada1)
+
+        # Turno Jugador B
+        cartaJugadaJugadorB = Turno().iniciar(perdedorJugada1)
+        
+        # Comparar las cartas jugadas para saber quien gano esa jugada
+        ganadorJugada2 = None
+        perdedorJugada2 = None
+
+        if(cartaJugadaJugadorA > cartaJugadaJugadorB):
+            ganadorJugada2 = ganadorJugada1
+            perdedorJugada2 = perdedorJugada1
+            contadortrucojugador1 += 1
+        elif(cartaJugadaJugadorA < cartaJugadaJugadorB):
+            ganadorJugada2 = perdedorJugada2
+            perdedorJugada2 = ganadorJugada2
+            contadortrucojugador2 += 1
+        else:
+            ganadorJugada2 = ganadorJugada1
+            perdedorJugada2 = perdedorJugada1
+
+        # 0 0 se juega tercera
+        # 1 1 se juega tercera
+        # 1 0 hay un ganador
+        # 2 0 hay un ganador
+        # Si los contadores son distintos hay un ganador
+        # Si los contadores son iguales hay empate y por lo tanto se juega tercera
+        if(contadortrucojugador1 != contadortrucojugador2):
+            hayGanador = True
+            
+        if((contadortrucojugador1 == 1 and contadortrucojugador2 == 0)
+        or (contadortrucojugador2 == 1 and contadortrucojugador1 == 0)
+        or contadortrucojugador1 == 2
+        or contadortrucojugador2 == 2):
+            hayGanador = True
+
+        print("Gano {}".format(ganadorJugada2.Nombre))
+
+    
+    # --------- TERCER TURNO DE AMBOS JUGADORES
+        # Verificar, si hubo un jugador que ya gano dos turnos entonces el tercer turno no se realiza
+        if(not HayGanador):
+            # Turno Jugador A
+            cartaJugadaJugadorA = Turno().iniciar(ganadorJugada2)
+
+            # Turno Jugador B
+            cartaJugadaJugadorB = Turno().iniciar(perdedorJugada2)
+        
+            # Comparar las cartas jugadas para saber quien gano esa jugada
+            ganadorJugada3 = None
+
+            if(cartaJugadaJugadorA > cartaJugadaJugadorB):
+                ganadorJugada3 = ganadorJugada2
+                contadortrucojugador1 += 1
+            elif:(cartaJugadaJugadorB > cartaJugadaJugadorA)
+                ganadorJugada3 = perdedorJugada2
+                contadortrucojugador2 += 1
+            else:
+                ganadorJugada3 = ganadorJugada1
+                contadortrucojugador1 += 1
+            
+                        
+            print("Ganó la partida {}".format(ganadorJugada3.Nombre))
+            
+        # Fin de tercero turno de ambos jugadores
+        else:
+        # Mostrar el ganador
+            if(contadortrucojugador1 >= contadortrucojugador2):
+                print("Ganó la partida {}".format(jugador1.Nombre))
+            else:
+                print("Ganó la partida {}".format(jugador2.Nombre))
+        
     # - Crear una funcion Comenzar en la clase ronda que devuelva 3 cartas del mazo y las quite del mazo
     def repartir(self):
         carta = choice(self.Mazo.Cartas)
         self.Mazo.Cartas.remove(carta)
+        if(carta in self.Mazo.Cartas):
+            print("Error, la carta repartida esta duplicada en el mazo o no fue removida. Carta: {}".format(carta))
+
         return carta
         # cartas_jug = sample(self.Mazo.Cartas, 3)
         # for carta in cartas_jug:
@@ -196,7 +285,8 @@ class Ronda:
 @dataclass
 class Turno:
     
-    def iniciar(self, jugador: "Jugador") -> "Carta":
+    @staticmethod
+    def iniciar(jugador: "Jugador") -> "Carta":
         print("                       ")
         print("Jugador {} comienza tu turno".format(jugador.Nombre))
         print("que carta desea jugar? eliga con el numero 1 2 o 3")
@@ -207,11 +297,10 @@ class Turno:
         
         cartaAJugarIndice = int(input()) - 1
         cartaAJugar = jugador.Mano.Cartas[cartaAJugarIndice]
+        jugador.Mano.Cartas.remove(cartaAJugar)
         print("{} juega la carta {}".format(jugador.Nombre, cartaAJugar))
         print("                       ")
         return cartaAJugar
-
-
 
 ##########################  EJECUCION DEL JUEGO  #############################################
 
