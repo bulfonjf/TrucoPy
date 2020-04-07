@@ -35,6 +35,7 @@
 from dataclasses import dataclass, field
 from typing import List
 from random import sample, choice
+from enum import Enum
 
 def make_french_deck():
     return [Carta(14, "Espada", "Uno de"), Carta(9, "Espada", "Dos de"),Carta(10, "Espada", "Tres de"), Carta(1, "Espada", "Cuatro de"), Carta(2, "Espada", "Cinco de"), Carta(3, "Espada", "Seis de"),Carta(12, "Espada", "Siete de"), Carta(5, "Espada", "Sota de"), Carta(6, "Espada", "Caballo de"), Carta(7, "Espada", "Rey de"), Carta(13, "Basto", "Uno de"), Carta(9, "Basto", "Dos de"),Carta(10, "Basto", "Tres de"), Carta(1, "Basto", "Cuatro de"), Carta(2, "Basto", "Cinco de"), Carta(3, "Basto", "Seis de"),Carta(4, "Basto", "Siete de"), Carta(5, "Basto", "Sota de"), Carta(6, "Basto", "Caballo de"), Carta(7, "Basto", "Rey de"), Carta(8, "Copa", "Uno de"), Carta(9, "Copa", "Dos de"),Carta(10, "Copa", "Tres de"), Carta(1, "Copa", "Cuatro de"), Carta(2, "Copa", "Cinco de"), Carta(3, "Copa", "Seis de"),Carta(4, "Copa", "Siete de"), Carta(5, "Copa", "Sota de"), Carta(6, "Copa", "Caballo de"), Carta(7, "Copa", "Rey de"), Carta(8, "Oro", "Uno de"), Carta(9, "Oro", "Dos de"),Carta(10, "Oro", "Tres de"), Carta(1, "Oro", "Cuatro de"), Carta(2, "Oro", "Cinco de"), Carta(3, "Oro", "Seis de"),Carta(4, "Oro", "Siete de"), Carta(5, "Oro", "Sota de"), Carta(6, "Oro", "Caballo de"), Carta(7, "Oro", "Rey de") ]
@@ -128,9 +129,10 @@ class Partida:
 @dataclass
 class Ronda:
     Mazo: "Mazo" = Mazo()
+    Truco: "Truco" = Truco()
     # Jugador1: "Jugador" 
     # Jugador2: "Jugador"
-
+    #PuntajeTruco = 0
     # - Al comenzar la ronda, generar un nuevo mazo
     # - Asignarle las cartas a los jugadores
     def iniciar(self, jugador1: "Jugador", jugador2: "Jugador"):
@@ -155,12 +157,12 @@ class Ronda:
         # Casos de Uso
         # Primera Segunda
         # A B     A B
-        # 1 0     1 0 -> ganador A   -> if jugada 2 
-        # 0 0     1 0 -> ganador A   -> if jugada 2
-        # 0 1     0 1 -> ganador B   -> if jugada 2
-        # 0 0     0 1 -> ganador B   -> elif if jugada 2
-        # 1 0     0 0 -> ganador A -> else jugada 2
-        # 0 1     0 0 -> ganador B -> else jugada 2
+        # 1 0     1 0 -> ganador A   -> if jugada 2  ->no hay tercera
+        # 0 0     1 0 -> ganador A   -> if jugada 2  ->no hay tercera
+        # 0 1     0 1 -> ganador B   -> if jugada 2  ->no hay tercera
+        # 0 0     0 1 -> ganador B   -> elif if jugada 2 ->no hay tercera
+        # 1 0     0 0 -> ganador A -> else jugada 2      ->no hay tercera
+        # 0 1     0 0 -> ganador B -> else jugada 2      ->no hay tercera
         # --      ---------------------------------
         # 0 1     1 0 -> empate, va a tercera elif else jugada 2
         # 1 0     0 1 -> empate, va a tercera elif else jugada 2
@@ -168,12 +170,18 @@ class Ronda:
         
         # --------- PRIMER TURNO DE AMBOS JUGADORES
         # Turno Jugador A
-       # tipeoprueba = Turno().cantarTruco(jugador1)
+        PuntosTruco = 0
+        PuntosTruco += Turno().cantarTruco(jugador1, jugador2, PuntosTruco)
+        
+        
+        print(PuntosTruco)
         cartaJugadaJugadorA = Turno().iniciar(jugador1)
 
         # Turno Jugador B
+        PuntosTruco += Turno().cantarTruco(jugador2, jugador1, PuntosTruco)
+        print(PuntosTruco)
         cartaJugadaJugadorB = Turno().iniciar(jugador2)
-
+       
         # Comparar las cartas jugadas para saber quien gano esa jugada
         primeroJugada1 = None
         segundoJugada1 = None
@@ -198,9 +206,14 @@ class Ronda:
       
         # --------- SEGUNDO TURNO DE AMBOS JUGADORES  
         # Turno Jugador A
+        PuntosTruco += Turno().cantarTruco(primeroJugada1, segundoJugada1, PuntosTruco)
+        print(PuntosTruco)
+       
         cartaJugadaJugadorA = Turno().iniciar(primeroJugada1)
 
         # Turno Jugador B
+        PuntosTruco += Turno().cantarTruco(segundoJugada1, primeroJugada1, PuntosTruco)
+        print(PuntosTruco)
         cartaJugadaJugadorB = Turno().iniciar(segundoJugada1)
         
         # Comparar las cartas jugadas para saber quien gano esa jugada
@@ -241,9 +254,13 @@ class Ronda:
             print("Continua {}".format(primeroJugada2.Nombre))
 
             # Turno Jugador A
+            PuntosTruco += Turno().cantarTruco(primeroJugada2, segundoJugada2, PuntosTruco)
+            print(PuntosTruco)
             cartaJugadaJugadorA = Turno().iniciar(primeroJugada2)
 
             # Turno Jugador B
+            PuntosTruco += Turno().cantarTruco(segundoJugada2, primeroJugada2, PuntosTruco)
+            print(PuntosTruco)
             cartaJugadaJugadorB = Turno().iniciar(segundoJugada2)
         
             # Comparar las cartas jugadas para saber quien gano esa jugada
@@ -255,7 +272,7 @@ class Ronda:
                 ganadorRonda = segundoJugada2
                 
             else:
-                ganadorRonda = primeroJugada1
+                ganadorRonda = primeroJugada1 # TODO aca le estamos dando por ganado al que era mano en la primer jugada, pero habria que ver si tenemos que evaluar si el jugador segundo gano la primer jugada
               
         # Fin de tercero turno de ambos jugadores
                 
@@ -291,40 +308,53 @@ class Ronda:
 
 @dataclass
 class Turno:
-   # @staticmethod
-    #def cantarTruco(jugador: "Jugador") -> "Carta":
-     #   print("                       ")
-      #  print("Jugador {} comienza tu turno".format(jugador.Nombre))
-       # print("que carta desea jugar? elija con el numero 1 2 o 3/ ¡Cantar Truco? elija opcion 4/Irse al mazo elija opcion 5")
-        #contador = 0
-        #for carta in jugador.Mano.Cartas:
-        #        contador += 1
-        #        print("opcion {}: {}".format(contador, carta))
-
-        #Tipeo = int(input())
-        #if(Tipeo == 4 ):
-        #    print("te cantaron truco, que elegis? quiero opicion 1, no quiero opcion 2")
-        #    respuesta = int(input())
-        #    if (respuesta == 1):
-        #        Truco
-        #    elif(respuesta == 2):
-        #    sume un 1 punto al jugador     al jugador q llamo a la funcion y termina la ronda
-        #elif(Tipeo == 5):
-        #    print("te juiste pichon")
-        #else:
-        #    cartaAJugarIndice = Tipeo - 1
-        #    cartaAJugar = jugador.Mano.Cartas[cartaAJugarIndice]
-        ##    jugador.Mano.Cartas.remove(cartaAJugar)
-         #   print("{} juega la carta {}".format(jugador.Nombre, cartaAJugar))
-         #   print("                       ")
-         #   return cartaAJugar
+    @staticmethod
+    def cantarTruco(jugadorA: "Jugador", jugadorB: "Jugador", niveltruco) -> int:
+        if (niveltruco < 4):
+            puntaje = 0
+            canto = 0
+            if (niveltruco == 0):
+                canto = "truco"
+            elif(niveltruco == 2):
+                canto = "retruco"
+            elif(niveltruco == 3):
+                canto = "quiero vale 4"
+            print("                       ")
+            print("Jugador {} ¿Querés cantar {}?, 1/si 2/no".format(jugadorA.Nombre, canto))
+            respuesta = int(input())
+            if (respuesta == 1):
+                print("cantaste {}".format(canto))
+                print("Jugador {} ¿aceptas el {}? si/1 no/2".format(jugadorB.Nombre, canto))
+                RespuestaCanto = int(input())
+                # si se esta jugando truco y se acepta se suma 2
+                if(RespuestaCanto == 1 and niveltruco == 0):
+                    puntaje = 2
+                # si se esta jugando truco y NO se acepta se suma 1
+                elif(RespuestaCanto == 2 and niveltruco == 0):
+                    puntaje = 1
+                # si NO se esta jugando truco y se acepta se suma 1
+                elif(RespuestaCanto == 1 and niveltruco > 0):
+                    puntaje = 1
+                # si NO se esta jugando truco y NO se acepta se suma 0
+                elif(RespuestaCanto == 2 and niveltruco > 0):
+                    puntaje = 0
+            elif(respuesta == 2):
+                print("no cantaste")
                 
-        
+            return puntaje
+        else:
+            puntaje = 0
+            return puntaje
+            
+                
+    #@staticmethod
+    #def responderTruco(jugador: "Jugador"):
+
     @staticmethod
     def iniciar(jugador: "Jugador") -> "Carta":
         print("                       ")
         print("Jugador {} comienza tu turno".format(jugador.Nombre))
-        print("que carta desea jugar? eliga con el numero 1 2 o 3")
+        print("que carta desea jugar? elija con el numero 1 2 o 3")
         contador = 0
         for carta in jugador.Mano.Cartas:
             contador += 1
@@ -336,6 +366,33 @@ class Turno:
         print("{} juega la carta {}".format(jugador.Nombre, cartaAJugar))
         print("                       ")
         return cartaAJugar
+ 
+
+@dataclass
+class NivelTruco(Enum):
+    truco = 2
+    retruco = 3
+    valecuatro = 4
+
+@dataclass
+class Truco:
+    ContadorNivelTruco: "NivelTruco" = None
+    QuienCanta: "jugador" = None
+    SiloSabeCante: "jugador" = None
+    ElQueAcepta: "jugador" = None
+    PuntajeRonda: int = 0
+    
+    nuevoObjetoTruco.ContadorNivelTruco
+
+        funcion cantar truco (quien canta, el que acepta, silosabecante, contador nivel)
+        comprueba el ContadorNivelTruco
+        evaluar variable si silosabecante = quiencanta
+        jugadorcanta uno quiere cantar?
+            jugador que acepta ?
+            contador nivel + 1
+            silosabecante = elqueacepta
+
+
 
 ##########################  EJECUCION DEL JUEGO  #############################################
 
