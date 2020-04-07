@@ -40,6 +40,11 @@ from enum import Enum
 def make_french_deck():
     return [Carta(14, "Espada", "Uno de"), Carta(9, "Espada", "Dos de"),Carta(10, "Espada", "Tres de"), Carta(1, "Espada", "Cuatro de"), Carta(2, "Espada", "Cinco de"), Carta(3, "Espada", "Seis de"),Carta(12, "Espada", "Siete de"), Carta(5, "Espada", "Sota de"), Carta(6, "Espada", "Caballo de"), Carta(7, "Espada", "Rey de"), Carta(13, "Basto", "Uno de"), Carta(9, "Basto", "Dos de"),Carta(10, "Basto", "Tres de"), Carta(1, "Basto", "Cuatro de"), Carta(2, "Basto", "Cinco de"), Carta(3, "Basto", "Seis de"),Carta(4, "Basto", "Siete de"), Carta(5, "Basto", "Sota de"), Carta(6, "Basto", "Caballo de"), Carta(7, "Basto", "Rey de"), Carta(8, "Copa", "Uno de"), Carta(9, "Copa", "Dos de"),Carta(10, "Copa", "Tres de"), Carta(1, "Copa", "Cuatro de"), Carta(2, "Copa", "Cinco de"), Carta(3, "Copa", "Seis de"),Carta(4, "Copa", "Siete de"), Carta(5, "Copa", "Sota de"), Carta(6, "Copa", "Caballo de"), Carta(7, "Copa", "Rey de"), Carta(8, "Oro", "Uno de"), Carta(9, "Oro", "Dos de"),Carta(10, "Oro", "Tres de"), Carta(1, "Oro", "Cuatro de"), Carta(2, "Oro", "Cinco de"), Carta(3, "Oro", "Seis de"),Carta(4, "Oro", "Siete de"), Carta(5, "Oro", "Sota de"), Carta(6, "Oro", "Caballo de"), Carta(7, "Oro", "Rey de") ]
 
+class NivelTruco(Enum):
+    nosecanto = 0
+    truco = 2
+    retruco = 3
+    valecuatro = 4
 
 @dataclass
 class Carta:
@@ -72,6 +77,26 @@ class Carta:
 @dataclass
 class Mazo:
     Cartas: List[Carta] = field(default_factory=make_french_deck)
+
+@dataclass
+class Truco:
+    ContadorNivelTruco: "NivelTruco" = None
+    QuienCanta: "jugador" = None
+    SiloSabeCante: "jugador" = None
+    ElQueAcepta: "jugador" = None
+    PuntajeRonda: int = 0
+    
+    # cuando arranque la ronda se podria crear un truco Truco(NivelTruco.NoSeCanto)
+
+    #def cantarTruco(cantante: "jugador"):
+        
+        # funcion cantar truco (quien canta, el que acepta, silosabecante, contador nivel)
+        # comprueba el ContadorNivelTruco
+        # evaluar variable si silosabecante = quiencanta
+        # jugadorcanta uno quiere cantar?
+        #     jugador que acepta ?
+        #     contador nivel + 1
+        #     silosabecante = elqueacepta
 
 @dataclass
 class Jugador:
@@ -366,37 +391,6 @@ class Turno:
         print("{} juega la carta {}".format(jugador.Nombre, cartaAJugar))
         print("                       ")
         return cartaAJugar
- 
-
-@dataclass
-class NivelTruco(Enum):
-    nosecanto = 0
-    truco = 2
-    retruco = 3
-    valecuatro = 4
-
-@dataclass
-class Truco:
-    ContadorNivelTruco: "NivelTruco" = None
-    QuienCanta: "jugador" = None
-    SiloSabeCante: "jugador" = None
-    ElQueAcepta: "jugador" = None
-    PuntajeRonda: int = 0
-    
-    # cuando arranque la ronda se podria crear un truco Truco(NivelTruco.NoSeCanto)
-
-    def cantarTruco(cantante: "jugador"):
-        
-
-        funcion cantar truco (quien canta, el que acepta, silosabecante, contador nivel)
-        comprueba el ContadorNivelTruco
-        evaluar variable si silosabecante = quiencanta
-        jugadorcanta uno quiere cantar?
-            jugador que acepta ?
-            contador nivel + 1
-            silosabecante = elqueacepta
-
-
 
 ##########################  EJECUCION DEL JUEGO  #############################################
 
