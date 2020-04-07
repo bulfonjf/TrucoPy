@@ -36,15 +36,19 @@ from dataclasses import dataclass, field
 from typing import List
 from random import sample, choice
 from enum import Enum
+from rx.subject import Subject
 
 def make_french_deck():
     return [Carta(14, "Espada", "Uno de"), Carta(9, "Espada", "Dos de"),Carta(10, "Espada", "Tres de"), Carta(1, "Espada", "Cuatro de"), Carta(2, "Espada", "Cinco de"), Carta(3, "Espada", "Seis de"),Carta(12, "Espada", "Siete de"), Carta(5, "Espada", "Sota de"), Carta(6, "Espada", "Caballo de"), Carta(7, "Espada", "Rey de"), Carta(13, "Basto", "Uno de"), Carta(9, "Basto", "Dos de"),Carta(10, "Basto", "Tres de"), Carta(1, "Basto", "Cuatro de"), Carta(2, "Basto", "Cinco de"), Carta(3, "Basto", "Seis de"),Carta(4, "Basto", "Siete de"), Carta(5, "Basto", "Sota de"), Carta(6, "Basto", "Caballo de"), Carta(7, "Basto", "Rey de"), Carta(8, "Copa", "Uno de"), Carta(9, "Copa", "Dos de"),Carta(10, "Copa", "Tres de"), Carta(1, "Copa", "Cuatro de"), Carta(2, "Copa", "Cinco de"), Carta(3, "Copa", "Seis de"),Carta(4, "Copa", "Siete de"), Carta(5, "Copa", "Sota de"), Carta(6, "Copa", "Caballo de"), Carta(7, "Copa", "Rey de"), Carta(8, "Oro", "Uno de"), Carta(9, "Oro", "Dos de"),Carta(10, "Oro", "Tres de"), Carta(1, "Oro", "Cuatro de"), Carta(2, "Oro", "Cinco de"), Carta(3, "Oro", "Seis de"),Carta(4, "Oro", "Siete de"), Carta(5, "Oro", "Sota de"), Carta(6, "Oro", "Caballo de"), Carta(7, "Oro", "Rey de") ]
 
-class NivelTruco(Enum):
+class EstadoTruco(Enum):
     nosecanto = 0
     truco = 2
     retruco = 3
     valecuatro = 4
+
+
+    
 
 @dataclass
 class Carta:
@@ -80,12 +84,14 @@ class Mazo:
 
 @dataclass
 class Truco:
-    ContadorNivelTruco: "NivelTruco" = None
+    EstadoTruco: "EstadoTruco" = EstadoTruco.nosecanto
     QuienCanta: "jugador" = None
     SiloSabeCante: "jugador" = None
     ElQueAcepta: "jugador" = None
     PuntajeRonda: int = 0
     
+    def cantarTruco(self, cantante, aceptante):
+        pass
     # cuando arranque la ronda se podria crear un truco Truco(NivelTruco.NoSeCanto)
 
     #def cantarTruco(cantante: "jugador"):
@@ -155,13 +161,29 @@ class Partida:
 class Ronda:
     Mazo: "Mazo" = Mazo()
     Truco: "Truco" = Truco()
+    TurnoDelJugador: "Jugador" = None
     # Jugador1: "Jugador" 
     # Jugador2: "Jugador"
     #PuntajeTruco = 0
     # - Al comenzar la ronda, generar un nuevo mazo
     # - Asignarle las cartas a los jugadores
-    def iniciar(self, jugador1: "Jugador", jugador2: "Jugador"):
+    def mostrarTurno(self, jugador: "jugador"):
+        print("Tu turno {}".format(jugador.Nombre))
         
+
+    def iniciar(self, jugador1: "Jugador", jugador2: "Jugador"):
+        cambioTurno = Subject()
+
+        cambioTurno.subscribe(lambda jugador: self.mostrarTurno(jugador))
+        cambioTurno.subscribe(lambda jugador: print("Tu turno {}".format(jugador.Nombre)))
+
+        self.TurnoDelJugador = jugador1
+        cambioTurno.on_next(self.TurnoDelJugador)
+        self.TurnoDelJugador = jugador2
+        cambioTurno.on_next(self.TurnoDelJugador)
+        self.TurnoDelJugador = jugador1
+        cambioTurno.on_next(self.TurnoDelJugador)
+
         self.Mazo = Mazo()
         
         jugador1.Mano.Cartas.clear()
@@ -169,15 +191,14 @@ class Ronda:
         
         # Este codigo se ejectua 3 veces. Reparte tres cartas.
         for _ in range(3):
-            # opcion A
-            # self.repartirJugador1(jugador1)
-            # o, la opcion B    
             jugador1.Mano.Cartas.append(self.repartir())
             jugador2.Mano.Cartas.append(self.repartir())
         
         # mostar las cartas de cada jugador (opcion B)
         jugador1.mostrarCartas()
         jugador2.mostrarCartas()
+
+
 
         # Casos de Uso
         # Primera Segunda
@@ -217,7 +238,6 @@ class Ronda:
         if(cartaJugadaJugadorA > cartaJugadaJugadorB):
             primeroJugada1 = jugador1
             segundoJugada1 = jugador2
-            
         elif(cartaJugadaJugadorA < cartaJugadaJugadorB):
             primeroJugada1 = jugador2
             segundoJugada1 = jugador1
@@ -226,7 +246,8 @@ class Ronda:
             primeroJugada1 = jugador1
             segundoJugada1 = jugador2
             PrimeraEmpate = True
-            
+        
+        self.TurnoDelJugador = primeroJugada1
         print("Continua {}".format(primeroJugada1.Nombre))
       
         # --------- SEGUNDO TURNO DE AMBOS JUGADORES  
@@ -275,7 +296,7 @@ class Ronda:
         # --------- TERCER TURNO DE AMBOS JUGADORES
         # Verificar, si hubo un jugador que ya gano dos turnos entonces el tercer turno no se realiza
         if(hayTercera):
-
+            self.TurnoDelJugador = primeroJugada2
             print("Continua {}".format(primeroJugada2.Nombre))
 
             # Turno Jugador A
@@ -313,23 +334,25 @@ class Ronda:
             print("Error, la carta repartida esta duplicada en el mazo o no fue removida. Carta: {}".format(carta))
 
         return carta
-        # cartas_jug = sample(self.Mazo.Cartas, 3)
-        # for carta in cartas_jug:
-        #     self.Mazo.Cartas.remove(carta)
-        # return cartas_jug
-
-
-    def repartirJugador1(self):
-        carta = choice(self.Mazo.Cartas)
-        self.Mazo.Cartas.remove(carta)
-        return carta
-        #print("Carta {}".format(self.carta))
     
-    def repartirJugador2(self):
-        carta = choice(self.Mazo.Cartas)
-        self.Mazo.Cartas.remove(carta)
-        return carta
-        #print("Carta {}".format(self.carta))
+    def showMenu(self):
+        if(self.Truco.SiloSabeCante.Nombre == self.TurnoDelJugador.Nombre):
+            print("podes cantar {}, si/1 o no/2".format(self.Truco.EstadoTruco))
+            respuesta = int(input())
+            # colgue aca el codigo
+        if(any(self.TurnoDelJugador.Mano.Cartas)):
+            print("puedes jugar las siguientes cartas")
+            for carta in self.TurnoDelJugador.Mano.Cartas:
+                print(carta)
+            
+        pass
+
+
+
+
+
+
+
 
 @dataclass
 class Turno:
