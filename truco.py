@@ -226,8 +226,8 @@ class EstadoEnvido:
 class Ronda:
     Mazo: "Mazo" = None
     Truco: "Truco" = None
-    # Jugador1: "Jugador" 
-    # Jugador2: "Jugador"
+    #Jugador1: "Jugador" 
+    #Jugador2: "Jugador"
     #PuntajeTruco = 0
     # - Al comenzar la ronda, generar un nuevo mazo
     # - Asignarle las cartas a los jugadores
@@ -406,93 +406,11 @@ class Ronda:
         return carta
         #print("Carta {}".format(self.carta))
 
-@dataclass
-class Turno:
-    @staticmethod
-    def cantarTruco(jugadorA: "Jugador", jugadorB: "Jugador", niveltruco) -> int:
-        if (niveltruco < 4):
-            puntaje = 0
-            canto = 0
-            if (niveltruco == 0):
-                canto = "truco"
-            elif(niveltruco == 2):
-                canto = "retruco"
-            elif(niveltruco == 3):
-                canto = "quiero vale 4"
-            print("                       ")
-            print("Jugador {} ¿Querés cantar {}?, 1/si 2/no".format(jugadorA.Nombre, canto))
-            respuesta = int(input())
-            if (respuesta == 1):
-                print("cantaste {}".format(canto))
-                print("Jugador {} ¿aceptas el {}? si/1 no/2".format(jugadorB.Nombre, canto))
-                RespuestaCanto = int(input())
-                # si se esta jugando truco y se acepta se suma 2
-                if(RespuestaCanto == 1 and niveltruco == 0):
-                    puntaje = 2
-                # si se esta jugando truco y NO se acepta se suma 1
-                elif(RespuestaCanto == 2 and niveltruco == 0):
-                    puntaje = 1
-                # si NO se esta jugando truco y se acepta se suma 1
-                elif(RespuestaCanto == 1 and niveltruco > 0):
-                    puntaje = 1
-                # si NO se esta jugando truco y NO se acepta se suma 0
-                elif(RespuestaCanto == 2 and niveltruco > 0):
-                    puntaje = 0
-            elif(respuesta == 2):
-                print("no cantaste")
-                
-            return puntaje
-        else:
-            puntaje = 0
-            return puntaje
-            
-                
-    #@staticmethod
-    #def responderTruco(jugador: "Jugador"):
+          
+              
+   
 
-    @staticmethod
-    def cantarTruco(jugadorA: "Jugador", jugadorB: "Jugador", niveltruco) -> int:
-        if (niveltruco < 4):
-            puntaje = 0
-            canto = 0
-            if (niveltruco == 0):
-                canto = "truco"
-            elif(niveltruco == 2):
-                canto = "retruco"
-            elif(niveltruco == 3):
-                canto = "quiero vale 4"
-            print("                       ")
-            print("Jugador {} ¿Querés cantar {}?, 1/si 2/no".format(jugadorA.Nombre, canto))
-            respuesta = int(input())
-            if (respuesta == 1):
-                print("cantaste {}".format(canto))
-                print("Jugador {} ¿aceptas el {}? si/1 no/2".format(jugadorB.Nombre, canto))
-                RespuestaCanto = int(input())
-                # si se esta jugando truco y se acepta se suma 2
-                if(RespuestaCanto == 1 and niveltruco == 0):
-                    puntaje = 2
-                
-                # si se esta jugando truco y NO se acepta se suma 1
-                elif(RespuestaCanto == 2 and niveltruco == 0):
-                    puntaje = 1
-                # si NO se esta jugando truco y se acepta se suma 1
-                elif(RespuestaCanto == 1 and niveltruco > 0):
-                    puntaje = 1
-                # si NO se esta jugando truco y NO se acepta se suma 0
-                elif(RespuestaCanto == 2 and niveltruco > 0):
-                    puntaje = 0
-            elif(respuesta == 2):
-                print("no cantaste")
-                
-            return puntaje
-        else:
-            puntaje = 0
-            return puntaje
-            
-                
-    #@staticmethod
-    #def responderTruco(jugador: "Jugador"):
-
+class Turno:    
     @staticmethod
     def iniciar(jugador: "Jugador") -> "Carta":
         print("                       ")
@@ -511,29 +429,10 @@ class Turno:
         return cartaAJugar
  
 
-@dataclass
-class NivelTruco(Enum):
-    truco = 2
-    retruco = 3
-    valecuatro = 4
 
-@dataclass
-class Truco:
-    ContadorNivelTruco: "NivelTruco" = None
-    QuienCanta: "jugador" = None
-    SiloSabeCante: "jugador" = None
-    ElQueAcepta: "jugador" = None
-    PuntajeRonda: int = 0
+
     
-    nuevoObjetoTruco.ContadorNivelTruco
-
-        funcion cantar truco (quien canta, el que acepta, silosabecante, contador nivel)
-        comprueba el ContadorNivelTruco
-        evaluar variable si silosabecante = quiencanta
-        jugadorcanta uno quiere cantar?
-            jugador que acepta ?
-            contador nivel + 1
-            silosabecante = elqueacepta
+    
 
 
 
