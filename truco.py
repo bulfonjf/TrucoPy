@@ -35,15 +35,18 @@
 from dataclasses import dataclass, field
 from typing import List
 from random import sample, choice
-from enum import Enum
+from enum import IntEnum
+from rx.subject import Subject
 
-class EstadoTruco(Enum):
-    nosecanto = 0
+subject_mostrarCartas = Subject()
+subject_mostrarCartas.subscribe( lambda x: print("{0}".format(x)))
+class EstadoTruco(IntEnum):
+    nosecanto = 1
     truco = 2
     retruco = 3
     valecuatro = 4
-
-class RespuestaSiNo(Enum):
+    
+class RespuestaSiNo(IntEnum):
     si = 1
     no = 2
 
@@ -94,7 +97,7 @@ class Jugador:
     def mostrarCartas(self):
         print(self.Nombre)
         print(self.Mano.Cartas)
-
+    
 @dataclass
 class Mano:
     Cartas: List[Carta] = field(default_factory=list)
@@ -137,56 +140,61 @@ class Partida:
             ronda = Ronda()
             ronda.iniciar(self.Jugador1, self.Jugador2)
 
+
 @dataclass
 class Truco:
     EstadoTruco: "EstadoTruco" = EstadoTruco.nosecanto
     QuienCanta: "jugador" = None
     SiloSabeCante: "jugador" = None
     ElQueAcepta: "jugador" = None
-    PuntajeRonda: int = 0
-    SeTerminoElTruco: bool = False
-
+    PuntajeRonda = 0
+    SeTerminoElTruco = False
+    
+    
+    @classmethod
     # la idea seria que al comienzo de la ronda se cree un objeto truco para que valla llevando la gestion del truco durante toda la ronda
-    def cantarTruco(self, cantante: "jugador", aceptante: "jugador"):
+    def cantarTruco(cls, cantante: "jugador", aceptante: "jugador"):
         # primero fijarse si vos podes realizar alguna accion
-        if(not self.SeTerminoElTruco and (self.SiloSabeCante == cantante or self.SiloSabeCante == None)):
+        if(not cls.SeTerminoElTruco and (cls.SiloSabeCante == cantante or cls.SiloSabeCante == None) and (cls.EstadoTruco < 4)):
 
-            print("{} queres cantar truco?".format(cantante.Nombre))
-            aceptoTruco = RespuestaSiNo( int( input() ) )
+            # primero obtiene el estado actual, le suma uno y desp obtiene el texto de ese valor
+            
+            seEstaCantando = EstadoTruco(cls.EstadoTruco +1 ).name
+            print("{} queres cantar {}? si/1 no/2".format(cantante.Nombre, seEstaCantando))
+            cantoTruco = RespuestaSiNo( int( input() ) )
 
-            if(aceptoTruco == RespuestaSiNo.si):
+            if(cantoTruco == RespuestaSiNo.si):
 
-                self.QuienCanta = cantante
-                self.ElQueAcepta = aceptante
-                self.SiloSabeCante = aceptante
-
-                # aca cantaste truco
-                if(self.EstadoTruco == EstadoTruco.nosecanto):
-                    self.EstadoTruco = EstadoTruco.truco
-                
-                # aca cantaste retruco
-                elif(self.EstadoTruco == EstadoTruco.truco):
-                    self.EstadoTruco = EstadoTruco.retruco
-
-                # aca cantaste valecuatro
-                elif(self.EstadoTruco == EstadoTruco.retruco):
-                    self.EstadoTruco = EstadoTruco.valecuatro
-                    self.SeTerminoElTruco = True
+                cls.QuienCanta = cantante    
+                cls.ElQueAcepta = aceptante  
+                cls.SiloSabeCante = aceptante 
+                cls.EstadoTruco += 1
 
                 # Muestro el canto
-                print("{} canto {}".format(cantante.Nombre, self.EstadoTruco)) #Ej: Mauro canto retruco
+                print("{} canto {}".format(cantante.Nombre, EstadoTruco(cls.EstadoTruco).name)) #Ej: Mauro canto retruco
 
                 # Pregunto al otro jugador si acepta
                 print("{} aceptas? 1/si 2/no".format(aceptante.Nombre))
                 respuestaAceptante = RespuestaSiNo(int(input())) # transformo el input del usuario en un numero, y despues en un objeto RespuestaSiNo
                 
                 if(respuestaAceptante == RespuestaSiNo.si):
-                    print("quiero")
-                    self.PuntajeRonda = self.EstadoTruco
+                    print("Quiero")
+                    cls.PuntajeRonda = cls.EstadoTruco
+                   # Truco.sumarpuntos(self.EstadoTruco)
+
+                elif(respuestaAceptante == RespuestaSiNo.no and (cls.EstadoTruco == 2)):
+                    print("NO quieroa")
+                    cls.EstadoTruco = EstadoTruco.nosecanto
+                    cls.PuntajeRonda = cls.EstadoTruco 
+                    cls.SeTerminoElTruco = True
                 else:
-                    print("NO quiero")
-                    self.PuntajeRonda = int(self.EstadoTruco) - 1 # TODO revisasr
-                    self.SeTerminoElTruco = True
+                    print("NO quierob")
+                    cls.PuntajeRonda = int(cls.EstadoTruco) # TODO revisasr
+                    cls.SeTerminoElTruco = True
+            
+            elif(cantoTruco == RespuestaSiNo.no):
+                cls.SeTerminoElTruco = True
+                    
 
     
 
@@ -198,6 +206,22 @@ class Truco:
         #     contador nivel + 1
         #     silosabecante = elqueacepta
 
+@dataclass
+#class EstadoRonda:
+# puntosWinDeTruco = Truco.PuntajeRonda2
+ #puntosWinDeEnvido = EstadoEnvido = 0
+ #totalWinRonda = (puntosWinDeTruco + EstadoEnvido)
+
+@dataclass
+class EstadoEnvido:
+    nosecanto = 0
+    envido = 2
+    realenvido = 3
+    envidoenvido = 4
+    envidorealenvido = 5
+    envidoenvidorealenvido = 7
+    faltaenvido = 30
+    flor = 3
 @dataclass
 class Ronda:
     Mazo: "Mazo" = None
@@ -224,6 +248,8 @@ class Ronda:
             jugador2.Mano.Cartas.append(self.repartir())
         
         # mostar las cartas de cada jugador (opcion B)
+        #subject_mostrarCartas.on_next(jugador1.Cartas)
+        #subject_mostrarCartas.on_next(jugador2.Cartas)
         jugador1.mostrarCartas()
         jugador2.mostrarCartas()
 
@@ -246,10 +272,9 @@ class Ronda:
         #PuntosTruco = 0
         #PuntosTruco += Turno().cantarTruco(jugador1, jugador2, PuntosTruco)
         
-
-        self.Truco.cantarTruco(jugador1, jugador2)
-        self.Truco.cantarTruco(jugador2,jugador1)
-
+        while ( not Truco.SeTerminoElTruco):
+            self.Truco.cantarTruco(jugador1, jugador2)
+            self.Truco.cantarTruco(jugador2,jugador1)
         
         cartaJugadaJugadorA = Turno().iniciar(jugador1)
 
@@ -352,9 +377,9 @@ class Ronda:
         # Fin de tercero turno de ambos jugadores
                 
         # Se muestra el ganador
-        print("Gano la ronda {}".format(ganadorRonda.Nombre))
-
-       
+            
+        print("Gano la ronda {} e hizo {} puntos".format(ganadorRonda.Nombre, Truco.PuntajeRonda))
+            
     # - Crear una funcion Comenzar en la clase ronda que devuelva 3 cartas del mazo y las quite del mazo
     def repartir(self):
         carta = choice(self.Mazo.Cartas)
@@ -383,6 +408,7 @@ class Ronda:
 
 @dataclass
 class Turno:
+    
     @staticmethod
     def cantarTruco(jugadorA: "Jugador", jugadorB: "Jugador", niveltruco) -> int:
         if (niveltruco < 4):
