@@ -49,10 +49,12 @@ class EstadoTruco(IntEnum):
 class RespuestaSiNo(IntEnum):
     si = 1
     no = 2
+    
+    
 
 
 def make_french_deck():
-    return [Carta(14, "Espada", "Uno de"), Carta(9, "Espada", "Dos de"),Carta(10, "Espada", "Tres de"), Carta(1, "Espada", "Cuatro de"), Carta(2, "Espada", "Cinco de"), Carta(3, "Espada", "Seis de"),Carta(12, "Espada", "Siete de"), Carta(5, "Espada", "Sota de"), Carta(6, "Espada", "Caballo de"), Carta(7, "Espada", "Rey de"), Carta(13, "Basto", "Uno de"), Carta(9, "Basto", "Dos de"),Carta(10, "Basto", "Tres de"), Carta(1, "Basto", "Cuatro de"), Carta(2, "Basto", "Cinco de"), Carta(3, "Basto", "Seis de"),Carta(4, "Basto", "Siete de"), Carta(5, "Basto", "Sota de"), Carta(6, "Basto", "Caballo de"), Carta(7, "Basto", "Rey de"), Carta(8, "Copa", "Uno de"), Carta(9, "Copa", "Dos de"),Carta(10, "Copa", "Tres de"), Carta(1, "Copa", "Cuatro de"), Carta(2, "Copa", "Cinco de"), Carta(3, "Copa", "Seis de"),Carta(4, "Copa", "Siete de"), Carta(5, "Copa", "Sota de"), Carta(6, "Copa", "Caballo de"), Carta(7, "Copa", "Rey de"), Carta(8, "Oro", "Uno de"), Carta(9, "Oro", "Dos de"),Carta(10, "Oro", "Tres de"), Carta(1, "Oro", "Cuatro de"), Carta(2, "Oro", "Cinco de"), Carta(3, "Oro", "Seis de"),Carta(4, "Oro", "Siete de"), Carta(5, "Oro", "Sota de"), Carta(6, "Oro", "Caballo de"), Carta(7, "Oro", "Rey de") ]
+    return [Carta(14, "Espada", "Uno de", images.image1), Carta(9, "Espada", "Dos de", images.image2),Carta(10, "Espada", "Tres de", images.image3), Carta(1, "Espada", "Cuatro de", images.image4), Carta(2, "Espada", "Cinco de", images.image5), Carta(3, "Espada", "Seis de", images.image6),Carta(12, "Espada", "Siete de", images.image7), Carta(5, "Espada", "Sota de", images.image8), Carta(6, "Espada", "Caballo de", images.image9), Carta(7, "Espada", "Rey de", images.image10), Carta(13, "Basto", "Uno de", images.image11), Carta(9, "Basto", "Dos de", images.image12),Carta(10, "Basto", "Tres de", images.image13), Carta(1, "Basto", "Cuatro de", images.image14), Carta(2, "Basto", "Cinco de", images.image15), Carta(3, "Basto", "Seis de", images.image16),Carta(4, "Basto", "Siete de", images.image17), Carta(5, "Basto", "Sota de", images.image18), Carta(6, "Basto", "Caballo de", images.image19), Carta(7, "Basto", "Rey de", images.image20), Carta(8, "Copa", "Uno de", images.image21), Carta(9, "Copa", "Dos de", images.image22),Carta(10, "Copa", "Tres de", images.image23), Carta(1, "Copa", "Cuatro de", images.image24), Carta(2, "Copa", "Cinco de", images.image25), Carta(3, "Copa", "Seis de", images.image26),Carta(4, "Copa", "Siete de", images.image27), Carta(5, "Copa", "Sota de", images.image28), Carta(6, "Copa", "Caballo de", images.image29), Carta(7, "Copa", "Rey de", images.image30), Carta(8, "Oro", "Uno de", images.image31), Carta(9, "Oro", "Dos de", images.image32),Carta(10, "Oro", "Tres de", images.image33), Carta(1, "Oro", "Cuatro de", images.image34), Carta(2, "Oro", "Cinco de", images.image35), Carta(3, "Oro", "Seis de", images.image36),Carta(4, "Oro", "Siete de", images.image37), Carta(5, "Oro", "Sota de", images.image38), Carta(6, "Oro", "Caballo de", images.image39), Carta(7, "Oro", "Rey de", images.image40) ]
 
 
 @dataclass
@@ -60,10 +62,10 @@ class Carta:
     Valor: int
     Palo: str
     Nombre: str
-
+    Imagen : "imagees"
     # STR y REPR son cuando alguien hace print(carta) se muestre solo el nombre y el palo (con un espacio en el medio)
     def __str__(self):
-        return "{} {} {}".format(image.image1, self.Nombre, self.Palo)
+        return "{} {}".format(self.Nombre, self.Palo)
     
     def __repr__(self):
         return "{} {}".format(self.Nombre, self.Palo)
@@ -423,26 +425,30 @@ class Turno:
     def iniciar(jugador: "Jugador") -> "Carta":
         print("                       ")
         print("Jugador {} comienza tu turno".format(jugador.Nombre))
+        render.imprimirmano(jugador)
         print("Jugador {} Indique que carta va a jugar? elija con el numero 1 2 o 3. ".format(jugador.Nombre))
         
-        Turno.imprimirmano(jugador)
+        
         
         cartaAJugarIndice = int(input()) - 1
         cartaAJugar = jugador.Mano.Cartas[cartaAJugarIndice]
         jugador.Mano.Cartas.remove(cartaAJugar)
+        render.dicguardador()
+        render.guardar(render.contadorfila, render.contadorcaract1, render.contadorcaract2, 1, cartaAJugar.Imagen)
+        render.unirdic(render.guardador["diccionario1"], render.guardador["diccionario2"], render.guardador["diccionario3"])
+        render.printear(render.store)
+        render.guardador = {}
         print("{} juega la carta {}".format(jugador.Nombre, cartaAJugar))
         print("                       ")
 
         return cartaAJugar
  
 
-
-
+ 
+@dataclass
+class images:
     
-    
-
-class image:
-    image1 = """A  `-------------------------------:   B
+    imageA = """A  `-------------------------------:   B
    -:/:-.//:`     .`-----..        +`   
    --.-.yy//o:     .+//+o.         /`   
    --   yhs-:s:   `///-/:          +`   
@@ -472,13 +478,1248 @@ class image:
    `/.......-:o+/:-.----........::/+`   
 Y   ````````````````````````````````   Z"""
 
+    image1 = """                                        
+                                       .
+     ``````       `````      ` ````    -
+     . /                          .    -
+     - .-..-:-``   `.``.     ` `` .    -
+     -  -/oo/soo:. `.-/y//++o+::: .    -
+     -  -hss .+sso/`  `-:-`-sh-`` .`   -
+     -  +sss  .+ooy+ ` `  ./.y`   .`   -
+     .  -+/s/.--+oss/++:`.+./+    .    -
+     -   `-o+/osoy++o+/../:/s/    .    -
+     -     ```::-oy/h+``::-ys+.:: .    -
+     .         ` -h/sy.o+.o+o++yy`.    -
+     -          .oos+sh+``s-++s-o:.    -
+     -        -//:+s++d.  o+://`+:.    -
+     .       `//  /os+h:  +s``:/- .    -
+     -       .+: `soy:ys`--- .+`  .    -
+     -      `/o:.+++ssoho/`  -/`  .    -
+     -     `+o-.++`-sd+y+   -y`   .    -
+     .     -/- .o+  oy:ss`  :/-   .    -
+     -   `/+-  `:o--yyo+y:  -o-   .    -
+     -   :o+    `oo+o+sh+s-       .    -
+     -   ://`    `.-` /o+-::.`    .    -
+     .    `            ./+--::.   .    -
+     .                  `:+//+: ``.    -
+     .                    `.:-` :`.    -
+     `               ``      ``````    -
+                                       -
+  `...................................-`"""    
+    image2 = """                                        
+                                       .
+      ````       ``````      ``````    -
+    `.`:  `.`               -     .    -
+    `... -o+h+-`           :+:    .    -
+    `.  `+yyho-/:`        `+/o    .`   -
+    `.  `/hoy+::::        `//o    .`   -
+    `.   `ysy/yo/:        `//o    .`   -
+    `. `-:sssos+:`        `//+    .`   -
+    `. -o+ssso:`          `//o    .`   -
+    `. ```yoo-            `//+    .`   -
+    `.    +//`            `//o    .`   -
+    `.    +//`            `//+    .`   -
+    `.    +//`            `//o    .`   -
+    `.    +//`            `//o    .`   -
+    `.    +//`            `//o    .`   -
+     .    +//`             /:o    .`   -
+    `.    +//`            `//o    .`   -
+     .    +//`           `:ssh-:. .`   -
+     .    +//`         `-/osos++- .`   -
+     .    +//`        `/ososss-`  .`   -
+    `.    +//`        :-++/soy.   .`   -
+     .    +//`        .::.+yoyo.  .`   -
+     .    +//`         .::/hsy/   ``   -
+     .    .+-             :+//` -..`   -
+     `    ``        ```      ```.`.    -
+                                       -
+  `...................................-`"""
+    image3 = """                                        
+                                       .
+     ``````      ``````      ``````    -
+    `-`:` ``       ``      ``     .`   -
+    `.`-`:sso/`   `+o`   `:sso/`  .`   -
+    `.  -sdhh//:. :/o:   -yhhh//:..`   -
+    `.  -yyyy+./+`:/o:   -yyys+.++.`   -
+    `.   /yysooo/.:/o:    /yyso+o+.`   -
+    `. `:+syssoo- :/o:  .:+sssyoo-.`   -
+    `.`/oohsso-`  :/o:  +oohss+-` ``   -
+    `. .`/yoo`    :/o:  .`/yoo`   .`   -
+    `.   `s:+     :/o:    .o//    ``   -
+    `.   `s:+     ::o:    .o:/    ``   -
+    `.   `s:/     ::o-    .o:/    .`   -
+    `.   `s:/     ::o:    .o:/    ``   -
+    `.   `s:/     ::o:    .o:/    .`   -
+    `.   `s:/     ::o-    .o:/    ``   -
+    `.   `s:/     :/o:    .o:/    ``   -
+    `.   `s:/    -ssys-:` .o:/    ``   -
+    `.   `s:/  -:ososo+/` .o:/    ``   -
+    `.   `s:/ :soyosso.`  .o:/    .`   -
+    `.   `s:/ ++:o+sso`   .o:/    ``   -
+    `.   `o:/ :/.:sysh/   .o::    ``   -
+     .   `s:/  .:/shyo-   .o/:    ``   -
+    `.    :/     .-//.     :/   -..`   -
+     .    ``   `    ```      ```.`.`   -
+                                       -
+  `...................................-`"""
+    image4 = """                                        
+                                       .
+     ``````      ``````      ``````    -
+    `..+ `                    `   .`   -
+    `. `.+/`                 /+.  .`   -
+    `.   +o/``            ``:s+   ``   -
+    `.  `/oso/.          .:oso/.  .`   -
+    `.  `-/+o+            :o+/-.  ``   -
+    `.     -/o`           o/:`    ``   -
+     .      -/+          :+:      ``   -
+    `.       .+.        `+-       ``   -
+     .        ./        :-        ``   -
+     .         .`       .         ``   -
+     .                            ``   -
+     .                            ``   -
+     .         ``       .         ``   -
+     .        `/        :-        ``   -
+     .       .+-        `+-       ``   -
+     .      ./+          -+:      ``   -
+     .     ./o-           o/:`    ``   -
+     -  `-:+++            -o//-.  ``   -
+     .  `:oso/-          `:oso/.  ``   -
+     .   :o+``            ``-o+`  ``   -
+     -  `++`                 :+- ```   -
+     .   `                    ` ::`.   -
+     `    `` ` `     ``       ``````   -
+                                       -
+  `...................................-`"""
+    image5 = """                                        
+                                       .
+     ``````       `````       ``````   -
+     - -. ::                 :-    .   -
+     -``  yy`               .yy`   .   -
+     -  `.ss.`             `-ss.`  .   -
+     . `:+sy+:`           ./oyy+:` .   -
+     .   :/o:               //s-   .   -
+     .   ./o`               -/s`   .   -
+     .    +o                `+o    .   -
+     .    //                 //    .   -
+     .    :-                 /.    .   -
+     .    .`           ``    -     .   -
+     .    ``````....--/o/-...`    `.   -
+     .    `..--:::////oy+++oo:`   `.   -
+     .    ``        ``.::`   .    `.   -
+     .    :-                 +`   `.   -
+     .    +:                 +:   `.   -
+     .    ++                ./+   `.   -
+     .   ./o                -/o   `.   -
+     .   :/o.               //o.  `.   -
+     . `-+ss/-            .:osy/- `.   -
+     .  .:oo-.            `-/so:` `.   -
+     .   .ss                :ss ```.   -
+     .   `:-                ./: :.`.   -
+     `               ``      ```````   -
+                                       -
+  `...................................-`"""
+    image6 = """                                        
+                                       .
+     ``````      ``````      ``````    -
+     -::``-.       ..       `-    .    -
+     .`` :so      `ss`      +o-   .    -
+     .  `:o+`     .oo.     `+o:`  .    -
+     . ./oss/:  `/oss+/`  -+ss+/. .    -
+     .  `++s`    `:/s/`   `.+++`  .    -
+     .   //o      ./o.      ++:   .    -
+     .   -//      `/o`      /+.   .    -
+     .   `o-       /+       -o    .    -
+     .    o`       ::       .+    .    -
+     .    :        .`       `-    .    -
+     .                            .    -
+     .                            .    -
+    `.    -        -`       `.    .    -
+    `.    o`       /.       ./    .    -
+    `.   .+.       /:       -+    .    -
+    `.   :/-      `/+       /o    .    -
+    ``   ///      -/o`     `/o-   .    -
+    ``  `/+o      //o.     -/+/   .    -
+    `` -+sso/.  ./+ss+-   :+ss+:` .    -
+    ``  `+o:`    `-o+.    `.oo.`  .    -
+    ``   +o:      -oo       ss    .    -
+    ``   .-`      `-.       -- `--.    -
+    ``    ``  ``    ``       ``````    -
+                                       -
+  `...................................-`"""
+    image7 = """                                        
+                                       .
+     ``````      ``````      ``````    -
+    `.:. `-`       --       `-`   -    -
+    `..  +o/      .ss`      +s:   -    -
+    `.  `+o/`    `-so.     `+o:`  -    -
+    `. -+sys+-  `/+yyo/`  :+sso+. -    -
+    `.  `o/+     `/o/:`    `s/+`  -    -
+    `.   +//      -o/.      o//   -    -
+    `.   //-      `o/       +/-   -    -
+    `.   -+`       +:       :o`   -    -
+    `.    o        /-       .+    -    -
+    ``    -        .`..`     -    -    -
+    ``   ```....---::oo/--:-`     -    -
+    ``  ``...---:::::ss+//+:.     -    -
+    ``    `        ``--`     `    -    -
+    ``   `o        /-       `+    -    -
+    ``   -+`       +:       -+    -    -
+    ``   //-      `+/       +/.   -    -
+    ``   +/:      -+/`      o::   .    -
+    ``  .o/+      ++/-     .s//   -    -
+    `` -+sso/.  ./oss+:`  :+yso/. .    -
+    ``  `+o:`    `-oo.    ``oo:`  -    -
+    ``   +o:      -oo       oo-   .    -
+    ``   .-`       -.       .-  :`-    -
+    ``    `         ``       `````.    -
+                                       -
+  `...................................-`"""
+    image8 = """                                        
+                                       .
+                  .-```                -
+    `.:-:``--`   -os//+- `````````-    -
+    `...` ./o   +ssso/o:          -    -
+    ``    -//   +/+:o/-           -    -
+    ``    :/- `-+o:-++:.          -    -
+    ``    /o-/+oyhyssys+/`        -    -
+    ``   `/soo/oyyoys/y/ss`       -    -
+    ``   .:sssyo/y:yy+y/hs+       -    -
+    ``   -+ysyys:yyyyhyshoo.      -    -
+    ``  `+ysy+osyhhhodhs/ss-      -    -
+    `` -+oyoo+sssy/ssosohys/      -    -
+    ``.:y/s/oos++o./o:+/ooo/      -    -
+    `.  /o-`:.-/so/oo/oo/-..      -    -
+    ``  ``    :hsyyysyysy/        .    -
+    `.        /ysyyhyysso-        -    -
+    `.         :o+osoo:o          -    -
+    ``         `y+o-s++:          .    -
+    `.         `y+s:y+o-          -    -
+    `.         `s/s-s++.          -    -
+    ``          +/+`/+/           .    -
+    ``          +o: ++:           -    -
+    `.         -///.:---.`        .    -
+    `.  ``..-::-.:---::---..` .-:-.    -
+     ````````..`   ` ``  `    ````.    -
+                                       -
+  `...................................-`"""
+    image9 = """                                       .
+      .````      `````      ``````     -
+     `.+ +        `--`          `.     -
+      .` -.     :+oys+`         `.     -
+      -  ./:`  /yooh+.          `.     -
+      -   .//. `++:y+.           .     -
+      -    `-/-/hhyhyhy+-`       -     -
+      -      .oyhyyyymshds:`-..` .     -
+      -      .yssdhsshoydosyyssso+-    -
+      -      +syohsydmhddhddhdyos+s`   -
+      -     .ydhhy+hNhdyhhhyshyooo:`   -
+      -  ./+yhddddyomhy+:-:/sds/+-     -
+      - odhyyshhhhhyyhhso+o/yhso--     -
+      -.ddhyysshyhdsyhsyhysoy+:- -     -
+      -`hhhysyossyyohhsyyyy/+s   -     -
+      - oyyyssysossodhsoyssyss:` -     -
+      -`shhsoshsosyydmsoysoyyhs+`-     -
+      - -sso++ddhssyssssyy+y+:+/.-     -
+      - -/-. ./+-       `-/. -+` .     -
+      - ::.  .:-`     `./:``:+`  -     -
+      -  /-   `:/`    +/.  ::`   .     -
+      -  .+`    -/:.             .     -
+      -   /::```.-:oo....``  `-...     -
+      - `.:/s:.-..``.``````  ..-`.     -
+      .    ``   `           ``````     -
+                                       -
+  `...................................-`"""
+    image10 ="""                                        
+                                       .
+     ``````       `````      ``````    -
+     --.--   `-  `-:+://          ``   -
+     ..`.`  `+/   yhsyyo          ``   -
+     -      /o.  -oo++oy+         ``   -
+     -     -+/ `.sso//+ho:        ``   -
+     -    `:/./shmdho++oyy+:`     ``   -
+     -    --/syo+yhydyssyssys-    ``   -
+     -   .:+yo-:--hsyyhhysyhys`   ``   -
+     -  `+o+:--s:-/++ooo+oysoh+   `.   -
+     ---+yh+-:+dmhyysyhysymo:+h.  `.   -
+     --+yddhy+dmhhhhh+yodyNmo-+.  `.   -
+     - oydhshmdd-oyy:.:-+:+myoh.  `.   -
+     - .shosyshs:sss:....::dysy+` `.   -
+     -  ..`/:+o::ssy+/.-.:-hh/+y+``.   -
+     -     /-/ssoyyyssoo/osds+////`.   -
+     -     /-+ssshyysyososms+:-..:-.   -
+     -     ::/yhydydys+sssmo----:/+.   -
+     -     `//hyydyhysosssdh--:/+oo.   -
+     -      :oyyhdhhyyooooyhs/++sy/.   -
+     -      `syhshhysy+//+ysdooyso`.   -
+     -    ``+ysdhyyshhoossdh+ooo/` .   -
+     -    :+o++osys:--+hy::--  ``.`.   -
+     -   ````-/+/:-...-+oo--.``-`/ .   -
+     `               ``  `    ``````   -
+                                       -
+  `...................................-`"""
+    image11 = """                                        
+                                       .
+    `.````    ````    ````    ````.    -
+    `.:`  +-                      -    -
+    `..  ody:                     -    -
+    `.   +y+++.                   -    -
+    `.    .s+/y+                  -    -
+    `.     .yo+yo.`               -    -
+    `.      os/+hss`              -    -
+    `.     .sho:syyo:             -    -
+    `.      /hho/oyhm:            -    -
+    `.       -sh+-oy+s..          -    -
+    `.      ./+do::/-soo.         -    -
+    `.       /`ys--+oyys          -    -
+    `.        `yys++:+hh/-        -    -
+    `.         -sds+..ohdy:       -    -
+    `.          `sso:.-s+/o`      -    -
+    `.          `sdy+-+/.-o`.`    -    -
+    `.           .ddo+o:+yyoo/`   -    -
+    `.          .+osyo::-yyhs-    -    -
+    ``          . `+yho--/yyhy-   -    -
+    ``             `yhsoo-+yyy-   -    -
+    ``              `-yhs--oys`   -    -
+    ..                .os/./o-  - -    -
+    `.                  .-.`   `: -    -
+     `         `      ```     `````    -
+                                       -
+  `...................................-`"""    
+    image12 = """                                        
+                                       .
+    `````     ````    ````    ````.    -
+    ```:  .-:-`             .-    -    -
+    ``.. oooshy-`         `yy.    -    -
+    ``  /ys:+shh+-        /ss     -    -
+    ``  yys//syd/         /sh     -    -
+    `.  oys/:yyh-         ssh-    -    -
+    `.  sys/+hdh`        /hsyo    -    -
+    `.  :yys+yhy        `od+os    -    -
+    `.  `hy//sy/        /sh/+d    -    -
+    `. `:ys//sh-        `yy/+d+`  -    -
+    `.`/sdy//hys        `dsssdy.  -    -
+    `. `.yh//sh-        .mo:ohs   -    -
+    `.  `yy+/sh         :do-/ds.` -    -
+    `.  -yhossy        `yhy-/yhy/ -    -
+    `.  .+h++yo         /ds-:os:  -    -
+    `.   `d/+ho-        sho-:yy   -    -
+    `.    h+od/`       .hdy/ssy-  -    -
+    `.    yyyy-        :hmho+syo  -    -
+    `.    :hh+         +hhs::oh/  -`   -
+    `.    .hy-        `+dyo::oh+  -`   -
+    `.    `ys-        :odho::oh-  .`   -
+    `.    -yo`         `:hy//s+ .`.`   -
+     .    -.             `::-. `:`.`   -
+     .`               ````    `````    -
+                                       -
+  `...................................-`"""
+    image13 = """                                        
+                                       .
+     .````    ````    ````    ````.    -
+    `-`+``        -:::`           -`   -
+    `-`./s      `yysshh:     `y-  -    -
+    `-  hy:     :ms:/ydh    `sN:  -`   -
+    `-  -yo/`  `ydh::hdm -.:sso`  -`   -
+    `-   -soy:  shh+smds+ydy++    -`   -
+    `-    :hoy:/ys+/yddshmhoo`    -`   -
+     -    `:y//ydds/ydmmhohd      -`   -
+     -      hh-:ydhyyhmy:odo      -`   -
+     -      +sh/-+hhhd+-ommo      -`   -
+     -       -ym+-oddo:ydhy+      -`   -
+     -      -yys+:/dy+/ss/+.      -`   -
+     -      /ds/osss+oso-.`       -`   -
+     -      :dhsdshd::/s:o-       -`   -
+     -      `ymho/hmdo:-syy`      -`   -
+     -    `-omy+yhNhhyo--:s:      -`   -
+     -  `.hmy+-+dmNdohso..-/+`    .`   -
+     -`/sdhs--oh/odd+d+hs.../s:.  -`   -
+     -`:hy/--ohh`/hhsdshhs-..+yy. -`   -
+     -`yy:-:sy-`  -dssos:ys+..:y` .`   -
+     -+ms+oyy.    `yd+.+.+sy-.-/- .`   -
+     -`/+oho`       -+     -//:-``.`   -
+     -                          o`.`   -
+     .                ````     ```.    -
+                                       -
+  `...................................-`"""
+    image14 = """                                        
+                                       .
+     `````    ````    ````     ````    -
+    `.`:`                         .`   -
+    `. -.://:`            .-::-.  .`   -
+    `. .ysyysy/`         /so/++s. .`   -
+    `. :yso+osy+        :y+-:/+y. .`   -
+    `.  +yo/-oy+       +so-.-+so  .`   -
+    `.  `yyy//so       -y/.:o+`   .`   -
+    `.   .-/soo+       :o-/:.     .`   -
+    `.      .+sy.     `o//`       .`   -
+    `.        /ys-    +s+`        .`   -
+    `.         :os/   +y-         .`   -
+    `.           ``   `:          .`   -
+    `.          `                 .`   -
+    `.         :o.  .::-`         .`   -
+     .         +s+   -syo`        .`   -
+     .        :+s`    `+so`       .`   -
+    `.      .:/+:      `yos/``    .`   -
+    `-    .+/-:y        yo/ss+/   .`   -
+     -  -+o/.-os:       yo/:oyy`  ``   -
+     - -yo:-./y+-       oyo::oys` ``   -
+     - /o+o:/so`        +ysssssh. .`   -
+     . .++++o/`          .ossss/  ``   -
+     .   ```               `.` `+```   -
+     .`   ```   `     ````    ``.`.`   -
+                                       -
+  `...................................-`"""
+    image15 = """                                        
+                                       .
+     `````     ````   ````     `````   -
+     . .-        `.                .   -
+     . ``        os.`/o+-          .   -
+     .         `/so`  .+o/`        .   -
+     .       `-oso`     ////.``    -   -
+     .     -+o+os`       o-:+oo-   .   -
+     -  ./ss+:+y+        ++-.:os-  .   -
+     .  syo+:+ys/        `y+--:+s: -   -
+     . .yssooso`          /o++o/s: .   -
+     .  :/+++-`       `    `-///-  .   -
+     .            ``.//+//:::-`    .   -
+     .     `-/:::::::---.--:://`   .   -
+     .`   `:/:-....--:----://:/    -   -
+     .`              `..-//-..`    .   -
+     .` -///:.            `:+oo+/` -   -
+     .`.s/+++o+`         `oso+sys/ -   -
+     .``so:--/s-        /oy+:/osy` -   -
+     `` .+s/.-/o        /y+:+os:-  -   -
+     ``  `+o+:-o`       ss+o/-     .   -
+     `.     `://+`     +oo-`       -   -
+     `.       `:o+-`  oy+`         -   -
+     `.         ./+/. ss         ``.   -
+     `.               ``        `:.-   -
+      .     ``  ``     ```     `````   -
+                                       -
+  `...................................-`"""
+    image16 = """                                        
+                                       .
+    `````     ````    ```     `````    -
+    .:-.   `               ``     .    -
+    `.` :+oo+/   -o:`    :+o+o/   .    -
+    `` :s+/o/s/   syo   -s+/o/s/  .    -
+    `` /s+.-:ss`  /ss   :y/.:-ss  .    -
+    `` +yo../y.   +ss-  /y+..:s.  .    -
+    `` :+s-.o/   -y+oy.`-/s--+/   .    -
+    ``  `o::/   `yo:+ys/  +/:/    .    -
+    ``   .o+.  `oyo-:oh-  .o+-    .    -
+    ``    yo-  `yss+/oy:   so-    .    -
+    ``    +so   -ysssso`   /oo    -    -
+    ``     .-`   .:/:-`     `-`   .    -
+    ``   :-`     .://:`   /-`     .    -
+    ``   -ys.   :s/+o+o`  /ys`    .    -
+    `.    ss/   ss:://y+  `sy-    .    -
+    `.    soo   ss:.-/s-  `so+    -    -
+    `.   .s+y: `os+.-o/   :soy.   -    -
+    `.  .yo:sy/.`:s-//   -y+:ss+  -    -
+    `. `os+-+yy.  o:o`  `ss+-oys  -    -
+    `. +ys+:/oh`  :oo   oys+:oss  .    -
+    `. `ysyyoss`  .ys.  .hsyyos+  -    -
+    `.  .oooo+.    .//   -osoo:`.-.    -
+    `.                          -..    -
+     `                ````    `````    -
+                                       -
+  `...................................-`"""
+    image17 = """                                        
+                                       .
+     .````     ```    ````     `````   -
+     -`:` ...`    ``       `..`   `.   -
+     -``.o+ooo`   .y+`    /o+oo/  `.   -
+     -  /s://so    oy-   `y+:++y. `.   -
+     -  +y:.:s-    os+   `yo.-+o` `.   -
+     -  :o+.++    -s+h-` ./s-:s.  `.   -
+     -   `s-+    .yo:sy/   +/+.   `.   -
+     -    /+:   `oy+:oy/   `so    `.   -
+     -    -s+    +yysoy:    ss.   `.   -
+     -     ./`   `/+o+-     `::   `.   -
+     -           `./++///::-`     `.   -
+     -   `-/:-::::::-----:://`    `.   -
+     -  `:+/--...-------://:/`    `.   -
+     -            ``..://:-.`     `.   -
+     -    /-     `-///.    /-`    `.   -
+     -    +y/    +s/o+s.   :yo    `.   -
+     -    -so    so-::y/   `yy    ``   -
+     -    /oy.  `os-.+o    -ss:   `.   -
+     -   :s/ss:  .o/-o`   .s/+y/` `.   -
+     -  .yo:+ys`  `o/-   `ss:/yy` `.   -
+     -  +yo++ss    oo.   :hs+/sh  `.   -
+     -  `ssyss:    :s+    osyss+ .``   -
+     -    ---`       .     .--` --``   -
+     .                ````    ```..`   -
+                                       -
+  `...................................-`"""
+    image18 = """                                        
+                                       .
+     `````    ````    ````     ````    -
+     -`::/   :::../::`            ``   -
+     -`.-`  +y:ooo////+`          ``   -
+     -      os:sos:ss+o+          ``   -
+     -      :h/so+:o/./o          ``   -
+     -      .h/ss+so:-++:--`      ``   -
+     .      `sossoyssosso/++      ``   -
+     -       :yyhs+sysos+oo-      ``   -
+     -      `/sohyyyyyhys::.      ``   -
+     -      .s:+dyydsysyo:-.      ``   -
+     .      `s+ydsoysooy+--`      ``   -
+     -       -/hs+/yoooso::.      ``   -
+     .        :shsshyssyh+s-      ``   -
+     .        +shyshyyyys:+`      ``   -
+     .        `.+:-+/::+`:-       ``   -
+     .          -/./+-.:          .`   -
+     .          `o//o::.          ``   -
+     .           s+oyoso          .`   -
+     .           /+/hs+s          .`   -
+     .           `s++oo+          .`   -
+     .            oo:+o:          ``   -
+     .      ```.:+ssyhs+....``    .`   -
+     .   `..-..:::-.`-ss:`    :.:/``   -
+     .   ``` ` `      .--`    .``..`   -
+                                       -
+  `...................................-`"""
+    image19 = """                                        
+                                       .
+     `.```    ````   ````    `````     -
+     .-+--                      `.     -
+     ..``.o++-   :-.:           `.     -
+     .`  .dyyy:  .o+h:          `.     -
+     .`  `hosss`-oy++s          `.     -
+     .`   .ho+s+osy+yh/`        `.     -
+     .`    +y/shyhyyhhdy:`      `.     -
+     .`     -y+yhyssyodhho....` `.     -
+     .`    `/yssmyhhyyhddyyyssoo:.     -
+     .`   /ossshmmymydhdddhddhoshs     -
+     .`   `//ohhoyhymdyyhdhhmhysys     -
+     .`.+osyyyhmydyhmmssss+hmhss+`     -
+     `+hdsyosyhdyhoydhhho//ddhy:.`     -
+      ddhyyosyhys+/yhyyysyydo+- ``     -
+     `yhhhyyoyyhy/yhyoysoyhho   ``     -
+     -ohyyhyshhhdddhs+hyoyssh-  ``     -
+     -ysdysyhhhdddysosyyoyyoys. ``     -
+     -+/o/o+ymdhsoy:.:++so+--+o```     -
+     .-s:/. oo+``..`    `y:  /+ ``     -
+     .`o+`  :o/         `h` `o- ``     -
+     - `s-   `o+`      `/s  os  ``     -
+     .  :o.   `/++-````:o-  -` ```     -
+     - `-+ys-----+s:.....`   /`/``     -
+     `  ````` ` `    ````    .`..`     -
+                                       -
+  `...................................-`
+"""
+    image20 ="""                                        
+                                       .
+     `````    ````    ````    `````    -
+    `.+.:..-`    . -`-```         .    -
+    `.` `ohs+:   `so+oo:`         .    -
+    `.   ohhy+y. `y+/oy/          -    -
+    `.   -dhoo++`oo/:os+:         -    -
+    `.    :yyys+dh+++o+ys/        -    -
+    `.     `ohy+ymsyhysyho/`      -    -
+    `.     -oddysmoosyssss/+.     .    -
+    `.   -:oooydsysooyysoh+oys+o+`.    -
+    `.  `+++++shdosyyhhhyddhdddy:`.    -
+    `.  /+o//yy:hh/sdshysdmydm+-- .    -
+    `.  :s/:+ss+smhhhoooohddyo-   -    -
+    `.  :s+++hs:ydsdy+sooshy:+-   -    -
+    `. :+s/ooh:/hhoso+sssyd:/o    .    -
+    `. `///ooho+hhsyooyyyhd+ho    .    -
+    `.   ./ooyyhhdyhsyshydhdh+    .    -
+    `.     /ys:shdddodhhhdhoys    .    -
+    `.     .h/:+yhhdyydysdh/os    .    -
+    `.      s-:oyyhdsymyoddyms-   .    -
+    `.    -/y-+ohodd+ymoohhsd++`  .    -
+    `.  `+sodhyddsmmohmyhmmds+s+:..    -
+    `.-/+oysso+oyys/::++oo/.-..---.    -
+    `.   `....---.`           .:`/.    -
+     `                ````    `.```    -
+                                       -
+  `...................................-`
+"""
+    image21 = """                                        
+                                       .
+    `.````    ````    ````    ````.    -
+    `.:`  +-                      -    -
+    `..  ody:                     -    -
+    `.   +y+++.                   -    -
+    `.    .s+/y+                  -    -
+    `.     .yo+yo.`               -    -
+    `.      os/+hss`              -    -
+    `.     .sho:syyo:             -    -
+    `.      /hho/oyhm:            -    -
+    `.       -sh+-oy+s..          -    -
+    `.      ./+do::/-soo.         -    -
+    `.       /`ys--+oyys          -    -
+    `.        `yys++:+hh/-        -    -
+    `.         -sds+..ohdy:       -    -
+    `.          `sso:.-s+/o`      -    -
+    `.          `sdy+-+/.-o`.`    -    -
+    `.           .ddo+o:+yyoo/`   -    -
+    `.          .+osyo::-yyhs-    -    -
+    ``          . `+yho--/yyhy-   -    -
+    ``             `yhsoo-+yyy-   -    -
+    ``              `-yhs--oys`   -    -
+    ..                .os/./o-  - -    -
+    `.                  .-.`   `: -    -
+     `         `      ```     `````    -
+                                       -
+  `...................................-`"""    
+    image22 = """                                        
+                                       .
+    `````     ````    ````    ````.    -
+    ```:  .-:-`             .-    -    -
+    ``.. oooshy-`         `yy.    -    -
+    ``  /ys:+shh+-        /ss     -    -
+    ``  yys//syd/         /sh     -    -
+    `.  oys/:yyh-         ssh-    -    -
+    `.  sys/+hdh`        /hsyo    -    -
+    `.  :yys+yhy        `od+os    -    -
+    `.  `hy//sy/        /sh/+d    -    -
+    `. `:ys//sh-        `yy/+d+`  -    -
+    `.`/sdy//hys        `dsssdy.  -    -
+    `. `.yh//sh-        .mo:ohs   -    -
+    `.  `yy+/sh         :do-/ds.` -    -
+    `.  -yhossy        `yhy-/yhy/ -    -
+    `.  .+h++yo         /ds-:os:  -    -
+    `.   `d/+ho-        sho-:yy   -    -
+    `.    h+od/`       .hdy/ssy-  -    -
+    `.    yyyy-        :hmho+syo  -    -
+    `.    :hh+         +hhs::oh/  -`   -
+    `.    .hy-        `+dyo::oh+  -`   -
+    `.    `ys-        :odho::oh-  .`   -
+    `.    -yo`         `:hy//s+ .`.`   -
+     .    -.             `::-. `:`.`   -
+     .`               ````    `````    -
+                                       -
+  `...................................-`"""
+    image23 = """                                        
+                                       .
+     .````    ````    ````    ````.    -
+    `-`+``        -:::`           -`   -
+    `-`./s      `yysshh:     `y-  -    -
+    `-  hy:     :ms:/ydh    `sN:  -`   -
+    `-  -yo/`  `ydh::hdm -.:sso`  -`   -
+    `-   -soy:  shh+smds+ydy++    -`   -
+    `-    :hoy:/ys+/yddshmhoo`    -`   -
+     -    `:y//ydds/ydmmhohd      -`   -
+     -      hh-:ydhyyhmy:odo      -`   -
+     -      +sh/-+hhhd+-ommo      -`   -
+     -       -ym+-oddo:ydhy+      -`   -
+     -      -yys+:/dy+/ss/+.      -`   -
+     -      /ds/osss+oso-.`       -`   -
+     -      :dhsdshd::/s:o-       -`   -
+     -      `ymho/hmdo:-syy`      -`   -
+     -    `-omy+yhNhhyo--:s:      -`   -
+     -  `.hmy+-+dmNdohso..-/+`    .`   -
+     -`/sdhs--oh/odd+d+hs.../s:.  -`   -
+     -`:hy/--ohh`/hhsdshhs-..+yy. -`   -
+     -`yy:-:sy-`  -dssos:ys+..:y` .`   -
+     -+ms+oyy.    `yd+.+.+sy-.-/- .`   -
+     -`/+oho`       -+     -//:-``.`   -
+     -                          o`.`   -
+     .                ````     ```.    -
+                                       -
+  `...................................-`"""
+    image24 = """                                        
+                                       .
+     `````    ````    ````     ````    -
+    `.`:`                         .`   -
+    `. -.://:`            .-::-.  .`   -
+    `. .ysyysy/`         /so/++s. .`   -
+    `. :yso+osy+        :y+-:/+y. .`   -
+    `.  +yo/-oy+       +so-.-+so  .`   -
+    `.  `yyy//so       -y/.:o+`   .`   -
+    `.   .-/soo+       :o-/:.     .`   -
+    `.      .+sy.     `o//`       .`   -
+    `.        /ys-    +s+`        .`   -
+    `.         :os/   +y-         .`   -
+    `.           ``   `:          .`   -
+    `.          `                 .`   -
+    `.         :o.  .::-`         .`   -
+     .         +s+   -syo`        .`   -
+     .        :+s`    `+so`       .`   -
+    `.      .:/+:      `yos/``    .`   -
+    `-    .+/-:y        yo/ss+/   .`   -
+     -  -+o/.-os:       yo/:oyy`  ``   -
+     - -yo:-./y+-       oyo::oys` ``   -
+     - /o+o:/so`        +ysssssh. .`   -
+     . .++++o/`          .ossss/  ``   -
+     .   ```               `.` `+```   -
+     .`   ```   `     ````    ``.`.`   -
+                                       -
+  `...................................-`"""
+    image25 = """                                        
+                                       .
+     `````     ````   ````     `````   -
+     . .-        `.                .   -
+     . ``        os.`/o+-          .   -
+     .         `/so`  .+o/`        .   -
+     .       `-oso`     ////.``    -   -
+     .     -+o+os`       o-:+oo-   .   -
+     -  ./ss+:+y+        ++-.:os-  .   -
+     .  syo+:+ys/        `y+--:+s: -   -
+     . .yssooso`          /o++o/s: .   -
+     .  :/+++-`       `    `-///-  .   -
+     .            ``.//+//:::-`    .   -
+     .     `-/:::::::---.--:://`   .   -
+     .`   `:/:-....--:----://:/    -   -
+     .`              `..-//-..`    .   -
+     .` -///:.            `:+oo+/` -   -
+     .`.s/+++o+`         `oso+sys/ -   -
+     .``so:--/s-        /oy+:/osy` -   -
+     `` .+s/.-/o        /y+:+os:-  -   -
+     ``  `+o+:-o`       ss+o/-     .   -
+     `.     `://+`     +oo-`       -   -
+     `.       `:o+-`  oy+`         -   -
+     `.         ./+/. ss         ``.   -
+     `.               ``        `:.-   -
+      .     ``  ``     ```     `````   -
+                                       -
+  `...................................-`"""
+    image26 = """                                        
+                                       .
+    `````     ````    ```     `````    -
+    .:-.   `               ``     .    -
+    `.` :+oo+/   -o:`    :+o+o/   .    -
+    `` :s+/o/s/   syo   -s+/o/s/  .    -
+    `` /s+.-:ss`  /ss   :y/.:-ss  .    -
+    `` +yo../y.   +ss-  /y+..:s.  .    -
+    `` :+s-.o/   -y+oy.`-/s--+/   .    -
+    ``  `o::/   `yo:+ys/  +/:/    .    -
+    ``   .o+.  `oyo-:oh-  .o+-    .    -
+    ``    yo-  `yss+/oy:   so-    .    -
+    ``    +so   -ysssso`   /oo    -    -
+    ``     .-`   .:/:-`     `-`   .    -
+    ``   :-`     .://:`   /-`     .    -
+    ``   -ys.   :s/+o+o`  /ys`    .    -
+    `.    ss/   ss:://y+  `sy-    .    -
+    `.    soo   ss:.-/s-  `so+    -    -
+    `.   .s+y: `os+.-o/   :soy.   -    -
+    `.  .yo:sy/.`:s-//   -y+:ss+  -    -
+    `. `os+-+yy.  o:o`  `ss+-oys  -    -
+    `. +ys+:/oh`  :oo   oys+:oss  .    -
+    `. `ysyyoss`  .ys.  .hsyyos+  -    -
+    `.  .oooo+.    .//   -osoo:`.-.    -
+    `.                          -..    -
+     `                ````    `````    -
+                                       -
+  `...................................-`"""
+    image27 = """                                        
+                                       .
+     .````     ```    ````     `````   -
+     -`:` ...`    ``       `..`   `.   -
+     -``.o+ooo`   .y+`    /o+oo/  `.   -
+     -  /s://so    oy-   `y+:++y. `.   -
+     -  +y:.:s-    os+   `yo.-+o` `.   -
+     -  :o+.++    -s+h-` ./s-:s.  `.   -
+     -   `s-+    .yo:sy/   +/+.   `.   -
+     -    /+:   `oy+:oy/   `so    `.   -
+     -    -s+    +yysoy:    ss.   `.   -
+     -     ./`   `/+o+-     `::   `.   -
+     -           `./++///::-`     `.   -
+     -   `-/:-::::::-----:://`    `.   -
+     -  `:+/--...-------://:/`    `.   -
+     -            ``..://:-.`     `.   -
+     -    /-     `-///.    /-`    `.   -
+     -    +y/    +s/o+s.   :yo    `.   -
+     -    -so    so-::y/   `yy    ``   -
+     -    /oy.  `os-.+o    -ss:   `.   -
+     -   :s/ss:  .o/-o`   .s/+y/` `.   -
+     -  .yo:+ys`  `o/-   `ss:/yy` `.   -
+     -  +yo++ss    oo.   :hs+/sh  `.   -
+     -  `ssyss:    :s+    osyss+ .``   -
+     -    ---`       .     .--` --``   -
+     .                ````    ```..`   -
+                                       -
+  `...................................-`"""
+    image28 = """                                        
+                                       .
+     `````    ````    ````     ````    -
+     -`::/   :::../::`            ``   -
+     -`.-`  +y:ooo////+`          ``   -
+     -      os:sos:ss+o+          ``   -
+     -      :h/so+:o/./o          ``   -
+     -      .h/ss+so:-++:--`      ``   -
+     .      `sossoyssosso/++      ``   -
+     -       :yyhs+sysos+oo-      ``   -
+     -      `/sohyyyyyhys::.      ``   -
+     -      .s:+dyydsysyo:-.      ``   -
+     .      `s+ydsoysooy+--`      ``   -
+     -       -/hs+/yoooso::.      ``   -
+     .        :shsshyssyh+s-      ``   -
+     .        +shyshyyyys:+`      ``   -
+     .        `.+:-+/::+`:-       ``   -
+     .          -/./+-.:          .`   -
+     .          `o//o::.          ``   -
+     .           s+oyoso          .`   -
+     .           /+/hs+s          .`   -
+     .           `s++oo+          .`   -
+     .            oo:+o:          ``   -
+     .      ```.:+ssyhs+....``    .`   -
+     .   `..-..:::-.`-ss:`    :.:/``   -
+     .   ``` ` `      .--`    .``..`   -
+                                       -
+  `...................................-`"""
+    image29 = """                                        
+                                       .
+     `.```    ````   ````    `````     -
+     .-+--                      `.     -
+     ..``.o++-   :-.:           `.     -
+     .`  .dyyy:  .o+h:          `.     -
+     .`  `hosss`-oy++s          `.     -
+     .`   .ho+s+osy+yh/`        `.     -
+     .`    +y/shyhyyhhdy:`      `.     -
+     .`     -y+yhyssyodhho....` `.     -
+     .`    `/yssmyhhyyhddyyyssoo:.     -
+     .`   /ossshmmymydhdddhddhoshs     -
+     .`   `//ohhoyhymdyyhdhhmhysys     -
+     .`.+osyyyhmydyhmmssss+hmhss+`     -
+     `+hdsyosyhdyhoydhhho//ddhy:.`     -
+      ddhyyosyhys+/yhyyysyydo+- ``     -
+     `yhhhyyoyyhy/yhyoysoyhho   ``     -
+     -ohyyhyshhhdddhs+hyoyssh-  ``     -
+     -ysdysyhhhdddysosyyoyyoys. ``     -
+     -+/o/o+ymdhsoy:.:++so+--+o```     -
+     .-s:/. oo+``..`    `y:  /+ ``     -
+     .`o+`  :o/         `h` `o- ``     -
+     - `s-   `o+`      `/s  os  ``     -
+     .  :o.   `/++-````:o-  -` ```     -
+     - `-+ys-----+s:.....`   /`/``     -
+     `  ````` ` `    ````    .`..`     -
+                                       -
+  `...................................-`
+"""
+    image30 ="""                                        
+                                       .
+     `````    ````    ````    `````    -
+    `.+.:..-`    . -`-```         .    -
+    `.` `ohs+:   `so+oo:`         .    -
+    `.   ohhy+y. `y+/oy/          -    -
+    `.   -dhoo++`oo/:os+:         -    -
+    `.    :yyys+dh+++o+ys/        -    -
+    `.     `ohy+ymsyhysyho/`      -    -
+    `.     -oddysmoosyssss/+.     .    -
+    `.   -:oooydsysooyysoh+oys+o+`.    -
+    `.  `+++++shdosyyhhhyddhdddy:`.    -
+    `.  /+o//yy:hh/sdshysdmydm+-- .    -
+    `.  :s/:+ss+smhhhoooohddyo-   -    -
+    `.  :s+++hs:ydsdy+sooshy:+-   -    -
+    `. :+s/ooh:/hhoso+sssyd:/o    .    -
+    `. `///ooho+hhsyooyyyhd+ho    .    -
+    `.   ./ooyyhhdyhsyshydhdh+    .    -
+    `.     /ys:shdddodhhhdhoys    .    -
+    `.     .h/:+yhhdyydysdh/os    .    -
+    `.      s-:oyyhdsymyoddyms-   .    -
+    `.    -/y-+ohodd+ymoohhsd++`  .    -
+    `.  `+sodhyddsmmohmyhmmds+s+:..    -
+    `.-/+oysso+oyys/::++oo/.-..---.    -
+    `.   `....---.`           .:`/.    -
+     `                ````    `.```    -
+                                       -
+  `...................................-`
+"""
+    image31 = """                                        
+                                       .
+    `.````    ````    ````    ````.    -
+    `.:`  +-                      -    -
+    `..  ody:                     -    -
+    `.   +y+++.                   -    -
+    `.    .s+/y+                  -    -
+    `.     .yo+yo.`               -    -
+    `.      os/+hss`              -    -
+    `.     .sho:syyo:             -    -
+    `.      /hho/oyhm:            -    -
+    `.       -sh+-oy+s..          -    -
+    `.      ./+do::/-soo.         -    -
+    `.       /`ys--+oyys          -    -
+    `.        `yys++:+hh/-        -    -
+    `.         -sds+..ohdy:       -    -
+    `.          `sso:.-s+/o`      -    -
+    `.          `sdy+-+/.-o`.`    -    -
+    `.           .ddo+o:+yyoo/`   -    -
+    `.          .+osyo::-yyhs-    -    -
+    ``          . `+yho--/yyhy-   -    -
+    ``             `yhsoo-+yyy-   -    -
+    ``              `-yhs--oys`   -    -
+    ..                .os/./o-  - -    -
+    `.                  .-.`   `: -    -
+     `         `      ```     `````    -
+                                       -
+  `...................................-`"""    
+    image32 = """                                        
+                                       .
+    `````     ````    ````    ````.    -
+    ```:  .-:-`             .-    -    -
+    ``.. oooshy-`         `yy.    -    -
+    ``  /ys:+shh+-        /ss     -    -
+    ``  yys//syd/         /sh     -    -
+    `.  oys/:yyh-         ssh-    -    -
+    `.  sys/+hdh`        /hsyo    -    -
+    `.  :yys+yhy        `od+os    -    -
+    `.  `hy//sy/        /sh/+d    -    -
+    `. `:ys//sh-        `yy/+d+`  -    -
+    `.`/sdy//hys        `dsssdy.  -    -
+    `. `.yh//sh-        .mo:ohs   -    -
+    `.  `yy+/sh         :do-/ds.` -    -
+    `.  -yhossy        `yhy-/yhy/ -    -
+    `.  .+h++yo         /ds-:os:  -    -
+    `.   `d/+ho-        sho-:yy   -    -
+    `.    h+od/`       .hdy/ssy-  -    -
+    `.    yyyy-        :hmho+syo  -    -
+    `.    :hh+         +hhs::oh/  -`   -
+    `.    .hy-        `+dyo::oh+  -`   -
+    `.    `ys-        :odho::oh-  .`   -
+    `.    -yo`         `:hy//s+ .`.`   -
+     .    -.             `::-. `:`.`   -
+     .`               ````    `````    -
+                                       -
+  `...................................-`"""
+    image33 = """                                        
+                                       .
+     .````    ````    ````    ````.    -
+    `-`+``        -:::`           -`   -
+    `-`./s      `yysshh:     `y-  -    -
+    `-  hy:     :ms:/ydh    `sN:  -`   -
+    `-  -yo/`  `ydh::hdm -.:sso`  -`   -
+    `-   -soy:  shh+smds+ydy++    -`   -
+    `-    :hoy:/ys+/yddshmhoo`    -`   -
+     -    `:y//ydds/ydmmhohd      -`   -
+     -      hh-:ydhyyhmy:odo      -`   -
+     -      +sh/-+hhhd+-ommo      -`   -
+     -       -ym+-oddo:ydhy+      -`   -
+     -      -yys+:/dy+/ss/+.      -`   -
+     -      /ds/osss+oso-.`       -`   -
+     -      :dhsdshd::/s:o-       -`   -
+     -      `ymho/hmdo:-syy`      -`   -
+     -    `-omy+yhNhhyo--:s:      -`   -
+     -  `.hmy+-+dmNdohso..-/+`    .`   -
+     -`/sdhs--oh/odd+d+hs.../s:.  -`   -
+     -`:hy/--ohh`/hhsdshhs-..+yy. -`   -
+     -`yy:-:sy-`  -dssos:ys+..:y` .`   -
+     -+ms+oyy.    `yd+.+.+sy-.-/- .`   -
+     -`/+oho`       -+     -//:-``.`   -
+     -                          o`.`   -
+     .                ````     ```.    -
+                                       -
+  `...................................-`"""
+    image34 = """                                        
+                                       .
+     `````    ````    ````     ````    -
+    `.`:`                         .`   -
+    `. -.://:`            .-::-.  .`   -
+    `. .ysyysy/`         /so/++s. .`   -
+    `. :yso+osy+        :y+-:/+y. .`   -
+    `.  +yo/-oy+       +so-.-+so  .`   -
+    `.  `yyy//so       -y/.:o+`   .`   -
+    `.   .-/soo+       :o-/:.     .`   -
+    `.      .+sy.     `o//`       .`   -
+    `.        /ys-    +s+`        .`   -
+    `.         :os/   +y-         .`   -
+    `.           ``   `:          .`   -
+    `.          `                 .`   -
+    `.         :o.  .::-`         .`   -
+     .         +s+   -syo`        .`   -
+     .        :+s`    `+so`       .`   -
+    `.      .:/+:      `yos/``    .`   -
+    `-    .+/-:y        yo/ss+/   .`   -
+     -  -+o/.-os:       yo/:oyy`  ``   -
+     - -yo:-./y+-       oyo::oys` ``   -
+     - /o+o:/so`        +ysssssh. .`   -
+     . .++++o/`          .ossss/  ``   -
+     .   ```               `.` `+```   -
+     .`   ```   `     ````    ``.`.`   -
+                                       -
+  `...................................-`"""
+    image35 = """                                        
+                                       .
+     `````     ````   ````     `````   -
+     . .-        `.                .   -
+     . ``        os.`/o+-          .   -
+     .         `/so`  .+o/`        .   -
+     .       `-oso`     ////.``    -   -
+     .     -+o+os`       o-:+oo-   .   -
+     -  ./ss+:+y+        ++-.:os-  .   -
+     .  syo+:+ys/        `y+--:+s: -   -
+     . .yssooso`          /o++o/s: .   -
+     .  :/+++-`       `    `-///-  .   -
+     .            ``.//+//:::-`    .   -
+     .     `-/:::::::---.--:://`   .   -
+     .`   `:/:-....--:----://:/    -   -
+     .`              `..-//-..`    .   -
+     .` -///:.            `:+oo+/` -   -
+     .`.s/+++o+`         `oso+sys/ -   -
+     .``so:--/s-        /oy+:/osy` -   -
+     `` .+s/.-/o        /y+:+os:-  -   -
+     ``  `+o+:-o`       ss+o/-     .   -
+     `.     `://+`     +oo-`       -   -
+     `.       `:o+-`  oy+`         -   -
+     `.         ./+/. ss         ``.   -
+     `.               ``        `:.-   -
+      .     ``  ``     ```     `````   -
+                                       -
+  `...................................-`"""
+    image36 = """                                        
+                                       .
+    `````     ````    ```     `````    -
+    .:-.   `               ``     .    -
+    `.` :+oo+/   -o:`    :+o+o/   .    -
+    `` :s+/o/s/   syo   -s+/o/s/  .    -
+    `` /s+.-:ss`  /ss   :y/.:-ss  .    -
+    `` +yo../y.   +ss-  /y+..:s.  .    -
+    `` :+s-.o/   -y+oy.`-/s--+/   .    -
+    ``  `o::/   `yo:+ys/  +/:/    .    -
+    ``   .o+.  `oyo-:oh-  .o+-    .    -
+    ``    yo-  `yss+/oy:   so-    .    -
+    ``    +so   -ysssso`   /oo    -    -
+    ``     .-`   .:/:-`     `-`   .    -
+    ``   :-`     .://:`   /-`     .    -
+    ``   -ys.   :s/+o+o`  /ys`    .    -
+    `.    ss/   ss:://y+  `sy-    .    -
+    `.    soo   ss:.-/s-  `so+    -    -
+    `.   .s+y: `os+.-o/   :soy.   -    -
+    `.  .yo:sy/.`:s-//   -y+:ss+  -    -
+    `. `os+-+yy.  o:o`  `ss+-oys  -    -
+    `. +ys+:/oh`  :oo   oys+:oss  .    -
+    `. `ysyyoss`  .ys.  .hsyyos+  -    -
+    `.  .oooo+.    .//   -osoo:`.-.    -
+    `.                          -..    -
+     `                ````    `````    -
+                                       -
+  `...................................-`"""
+    image37 = """                                        
+                                       .
+     .````     ```    ````     `````   -
+     -`:` ...`    ``       `..`   `.   -
+     -``.o+ooo`   .y+`    /o+oo/  `.   -
+     -  /s://so    oy-   `y+:++y. `.   -
+     -  +y:.:s-    os+   `yo.-+o` `.   -
+     -  :o+.++    -s+h-` ./s-:s.  `.   -
+     -   `s-+    .yo:sy/   +/+.   `.   -
+     -    /+:   `oy+:oy/   `so    `.   -
+     -    -s+    +yysoy:    ss.   `.   -
+     -     ./`   `/+o+-     `::   `.   -
+     -           `./++///::-`     `.   -
+     -   `-/:-::::::-----:://`    `.   -
+     -  `:+/--...-------://:/`    `.   -
+     -            ``..://:-.`     `.   -
+     -    /-     `-///.    /-`    `.   -
+     -    +y/    +s/o+s.   :yo    `.   -
+     -    -so    so-::y/   `yy    ``   -
+     -    /oy.  `os-.+o    -ss:   `.   -
+     -   :s/ss:  .o/-o`   .s/+y/` `.   -
+     -  .yo:+ys`  `o/-   `ss:/yy` `.   -
+     -  +yo++ss    oo.   :hs+/sh  `.   -
+     -  `ssyss:    :s+    osyss+ .``   -
+     -    ---`       .     .--` --``   -
+     .                ````    ```..`   -
+                                       -
+  `...................................-`"""
+    image38 = """                                        
+                                       .
+     `````    ````    ````     ````    -
+     -`::/   :::../::`            ``   -
+     -`.-`  +y:ooo////+`          ``   -
+     -      os:sos:ss+o+          ``   -
+     -      :h/so+:o/./o          ``   -
+     -      .h/ss+so:-++:--`      ``   -
+     .      `sossoyssosso/++      ``   -
+     -       :yyhs+sysos+oo-      ``   -
+     -      `/sohyyyyyhys::.      ``   -
+     -      .s:+dyydsysyo:-.      ``   -
+     .      `s+ydsoysooy+--`      ``   -
+     -       -/hs+/yoooso::.      ``   -
+     .        :shsshyssyh+s-      ``   -
+     .        +shyshyyyys:+`      ``   -
+     .        `.+:-+/::+`:-       ``   -
+     .          -/./+-.:          .`   -
+     .          `o//o::.          ``   -
+     .           s+oyoso          .`   -
+     .           /+/hs+s          .`   -
+     .           `s++oo+          .`   -
+     .            oo:+o:          ``   -
+     .      ```.:+ssyhs+....``    .`   -
+     .   `..-..:::-.`-ss:`    :.:/``   -
+     .   ``` ` `      .--`    .``..`   -
+                                       -
+  `...................................-`"""
+    image39 = """                                        
+                                       .
+     `.```    ````   ````    `````     -
+     .-+--                      `.     -
+     ..``.o++-   :-.:           `.     -
+     .`  .dyyy:  .o+h:          `.     -
+     .`  `hosss`-oy++s          `.     -
+     .`   .ho+s+osy+yh/`        `.     -
+     .`    +y/shyhyyhhdy:`      `.     -
+     .`     -y+yhyssyodhho....` `.     -
+     .`    `/yssmyhhyyhddyyyssoo:.     -
+     .`   /ossshmmymydhdddhddhoshs     -
+     .`   `//ohhoyhymdyyhdhhmhysys     -
+     .`.+osyyyhmydyhmmssss+hmhss+`     -
+     `+hdsyosyhdyhoydhhho//ddhy:.`     -
+      ddhyyosyhys+/yhyyysyydo+- ``     -
+     `yhhhyyoyyhy/yhyoysoyhho   ``     -
+     -ohyyhyshhhdddhs+hyoyssh-  ``     -
+     -ysdysyhhhdddysosyyoyyoys. ``     -
+     -+/o/o+ymdhsoy:.:++so+--+o```     -
+     .-s:/. oo+``..`    `y:  /+ ``     -
+     .`o+`  :o/         `h` `o- ``     -
+     - `s-   `o+`      `/s  os  ``     -
+     .  :o.   `/++-````:o-  -` ```     -
+     - `-+ys-----+s:.....`   /`/``     -
+     `  ````` ` `    ````    .`..`     -
+                                       -
+  `...................................-`
+"""
+    image40 ="""                                        
+                                       .
+     `````    ````    ````    `````    -
+    `.+.:..-`    . -`-```         .    -
+    `.` `ohs+:   `so+oo:`         .    -
+    `.   ohhy+y. `y+/oy/          -    -
+    `.   -dhoo++`oo/:os+:         -    -
+    `.    :yyys+dh+++o+ys/        -    -
+    `.     `ohy+ymsyhysyho/`      -    -
+    `.     -oddysmoosyssss/+.     .    -
+    `.   -:oooydsysooyysoh+oys+o+`.    -
+    `.  `+++++shdosyyhhhyddhdddy:`.    -
+    `.  /+o//yy:hh/sdshysdmydm+-- .    -
+    `.  :s/:+ss+smhhhoooohddyo-   -    -
+    `.  :s+++hs:ydsdy+sooshy:+-   -    -
+    `. :+s/ooh:/hhoso+sssyd:/o    .    -
+    `. `///ooho+hhsyooyyyhd+ho    .    -
+    `.   ./ooyyhhdyhsyshydhdh+    .    -
+    `.     /ys:shdddodhhhdhoys    .    -
+    `.     .h/:+yhhdyydysdh/os    .    -
+    `.      s-:oyyhdsymyoddyms-   .    -
+    `.    -/y-+ohodd+ymoohhsd++`  .    -
+    `.  `+sodhyddsmmohmyhmmds+s+:..    -
+    `.-/+oysso+oyys/::++oo/.-..---.    -
+    `.   `....---.`           .:`/.    -
+     `                ````    `.```    -
+                                       -
+  `...................................-`
+"""
 
 ##########################  EJECUCION DEL JUEGO  #############################################
-
-imgcompleta = list(image.image1)
+listaimag = [images.image1, images.image2, images.image3, images.image4, images.image5, images.image6, images.image7, images.image8, images.image9, images.image10]
+imgcompleta = list(choice(listaimag))
+imgcompleta2 =list(choice(listaimag))
+imgcompleta3 = list(choice(listaimag))
 @dataclass
 class render:
     contadorfila = 1
+    contadorcaract1 = 0
+    contadorcaract2 = 40
+    imagen1x = {}
+    lista = []
+    imagen2 = {}
+    imagen3 = {}
+    store = {}
+    guardador = {}
+    @classmethod
+    def guardar (cls, contadorfila, contadorcaract1, contadorcaract2, contador, imagen):
+            imagen1 = {}
+            while (cls.contadorfila < 30):
+                fila = imagen[cls.contadorcaract1:cls.contadorcaract2]
+                cls.contadorcaract1 += 41
+                cls.contadorcaract2 += 41
+                imagen1["{}".format(cls.contadorfila)] = fila
+                cls.contadorfila += 1
+                #print(cls.imagen1)
+            cls.guardador["diccionario{}".format(contador)] = imagen1
+            cls.contadorfila = 1
+            cls.contadorcaract1 = 0
+            cls.contadorcaract2 = 40
+            
+    #@classmethod
+    #def dicalist (cls, diccionario):
+        
+      #  cls.lista = list(diccionario.values())
+      #  x = ''.join(str(e) for e in cls.lista)
+        #print(x)
+     #   makeitastring = ''.join(map(str, cls.lista))
+        #print(makeitastring)
+    
+    @classmethod
+    def unirdic(cls, diccionario1, diccionario2 , diccionario3 ):
+        for valor in diccionario1.keys():
+            cls.store["{}".format(valor)] = diccionario1[valor] + diccionario2[valor] + diccionario3[valor]
+            #print (cls.store)
+    
+    @classmethod    
+    def printear(cls, diccionario):
+        for value in diccionario.values():
+            makeitastring = ''.join(map(str, value))
+            print(makeitastring)
+    @classmethod
+    def dicguardador(cls):
+        img = "           "
+        lista = img[2:5]
+        diccionario1 = {}
+        diccionario2 = {}
+        diccionario3 = {}
+        contador = 0
+        while (contador < 40):
+            diccionario1["{}".format(contador)] = lista
+
+            diccionario2["{}".format(contador)] = lista
+    
+            diccionario3["{}".format(contador)] = lista
+            contador += 1
+        cls.guardador["diccionario1"] = diccionario1
+        cls.guardador["diccionario2"] = diccionario2 
+        cls.guardador["diccionario3"] = diccionario3 
+    @staticmethod
+    def imprimirmano(jugador : "jugador"):
+        manoimpresa = []
+        contador = 0
+        render.dicguardador()
+        #print(render.guardador)
+        for carta in jugador.Mano.Cartas:
+            contador += 1
+            render.guardar(render.contadorfila, render.contadorcaract1, render.contadorcaract2, contador, carta.Imagen)
+            manoimpresa.append("opcion {}:              {}".format(contador, carta))
+            
+        render.unirdic(render.guardador["diccionario1"], render.guardador["diccionario2"], render.guardador["diccionario3"])
+        render.printear(render.store)
+        print(manoimpresa)
+        #print(render.guardador)
+        render.guardador = {}
+
+#render.guardar(render.contadorfila, render.contadorcaract1, render.contadorcaract2)
+#render.guardar2(render.contadorfila, render.contadorcaract1, render.contadorcaract2)
+#render.guardar3(render.contadorfila, render.contadorcaract1, render.contadorcaract2)
+#render.dicalist(render.imagen1)
+#render.unirdic(render.imagen1,render.imagen2, render.imagen3)
+#render.printear(render.store)
+
+# Partida
+
+
+#render.guardar(render.contadorfila, render.contadorcaract1, render.contadorcaract2)
+#render.guardar(render.contadorfila, render.contadorcaract1, render.contadorcaract2)
+#render.guardar(render.contadorfila, render.contadorcaract1, render.contadorcaract2)
+#render.guardar2(render.contadorfila, render.contadorcaract1, render.contadorcaract2)
+#render.guardar3(render.contadorfila, render.contadorcaract1, render.contadorcaract2)
+#render.dicalist(render.imagen1)
+#render.unirdic(render.guardador["diccionario30"], render.guardador["diccionario30"], render.guardador["diccionario30"])
+#render.printear(render.store)
+#print(render.guardador)
+
+
+partida = Partida()
+
+partida.crear()
+
+
+#imgcompleta2 = list(image.image1)
+@dataclass
+class render2:
+    contadorfila2 = 1
     contadorcaract1 = 0
     contadorcaract2 = 40
     imagen1 = {}
@@ -486,15 +1727,20 @@ class render:
     imagen2 = imagen1
     imagen3 = imagen2
     store = {}
+    
     @classmethod
-    def guardar (cls, contadorfila, contadorcaract1, contadorcaract2):
-            while (cls.contadorfila < 30):
-                fila = imgcompleta[cls.contadorcaract1:cls.contadorcaract2]
-                cls.contadorcaract1 += 41
-                cls.contadorcaract2 += 41
-                cls.imagen1["{}".format(cls.contadorfila)] = fila
-                cls.contadorfila += 1
-                #print(cls.imagen1)
+    def guardar (cls, imagencompleta2):
+        contadorfila = 1
+        contadorcaract1 = 0
+        contadorcaract2 = 40
+        imagen1 = {}
+        while (contadorfila < 30):
+            fila = imgcompleta2[contadorcaract1 : contadorcaract2]
+            contadorcaract1 += 41
+            contadorcaract2 += 41
+            imagen1["{}".format(contadorfila)] = fila
+            contadorfila += 1
+        return(imagen1)
     @classmethod
     def dicalist (cls, diccionario):
         
@@ -503,25 +1749,55 @@ class render:
         #print(x)
         makeitastring = ''.join(map(str, cls.lista))
         #print(makeitastring)
-    @classmethod    
-    def printear(cls, diccionario):
-        for value in diccionario.values():
-            makeitastring = ''.join(map(str, value))
-            print(makeitastring)
+    
     @classmethod
     def unirdic(cls, diccionario1, diccionario2, diccionario3):
         for valor in diccionario1.keys():
             cls.store["{}".format(valor)] = diccionario1[valor] + diccionario2[valor] + diccionario3[valor]
             #print (cls.store)
-# Partida
+    
+    @classmethod    
+    def printear(cls, diccionario):
+        for value in diccionario.values():
+            makeitastring = ''.join(map(str, value))
+            print(makeitastring)
 
-#print(image.image1)
-render.guardar(render.contadorfila, render.contadorcaract1, render.contadorcaract2)
-render.dicalist(render.imagen1)
-#render.printear(render.imagen1)
-#print(render.imagen2)
-render.unirdic(render.imagen1,render.imagen2, render.imagen3)
-render.printear(render.store)
-#partida = Partida()
-#print (image.image1, image.image1)
-#partida.crear()
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
