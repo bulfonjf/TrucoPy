@@ -63,7 +63,7 @@ class Carta:
 
     # STR y REPR son cuando alguien hace print(carta) se muestre solo el nombre y el palo (con un espacio en el medio)
     def __str__(self):
-        return "{} {}".format(self.Nombre, self.Palo)
+        return "{} {} {}".format(image.image1, self.Nombre, self.Palo)
     
     def __repr__(self):
         return "{} {}".format(self.Nombre, self.Palo)
@@ -412,14 +412,21 @@ class Ronda:
 
 class Turno:    
     @staticmethod
+    def imprimirmano(jugador : "jugador"):
+        manoimpresa = []
+        contador = 0
+        for carta in jugador.Mano.Cartas:
+            contador += 1
+            manoimpresa.append("opcion {}: {}".format(contador, carta))
+        print(manoimpresa)    
+    @staticmethod
     def iniciar(jugador: "Jugador") -> "Carta":
         print("                       ")
         print("Jugador {} comienza tu turno".format(jugador.Nombre))
         print("Jugador {} Indique que carta va a jugar? elija con el numero 1 2 o 3. ".format(jugador.Nombre))
-        contador = 0
-        for carta in jugador.Mano.Cartas:
-            contador += 1
-            print("opcion {}: {}".format(contador, carta))
+        
+        Turno.imprimirmano(jugador)
+        
         cartaAJugarIndice = int(input()) - 1
         cartaAJugar = jugador.Mano.Cartas[cartaAJugarIndice]
         jugador.Mano.Cartas.remove(cartaAJugar)
@@ -434,13 +441,87 @@ class Turno:
     
     
 
-
+class image:
+    image1 = """A  `-------------------------------:   B
+   -:/:-.//:`     .`-----..        +`   
+   --.-.yy//o:     .+//+o.         /`   
+   --   yhs-:s:   `///-/:          +`   
+   --   :hy/-/s.`-++oo:/+.         /`   
+   --    /sy:-+o+ooos++::.         /`   
+   --     :hs::yosyo+/+os/-        /`   
+   --      /hs:oyyyssossys+:    `  /    
+   --    `:oshs/yyysssosoy++/-.::. /`   
+   --  ``:ossohyodhsss+o+sssys+/.. /    
+   --  //ooo+syhsydhss+oooyyds-:   +`   
+   -- `++/oosso:o+o//+o//+syy:.-   /    
+   -- .sssosoh--::-+yyos/oyho-`:   +    
+   --  soos/yo../dhsyy+y++sy+- -   +    
+   -- `+y++os/:`:dhyhs/y+osy/..-   /`   
+   -- :hoyos+.-`:hysos+s+osy+`.-   /`   
+   --`oysyo/y-- -hssoy+o+o+y/.+:   /`   
+   -- -soo+oy/:.:ysoos+s+o/s+s+-   /`   
+   --  `-+oss////hyooy+o+o/+yo+-   /`   
+   -:    `+oo:///yy++hoo/++oss:.   /`   
+   .:     -ss/.-/yy++yoo++o+/:+.   /`   
+   .:     `o+hs+-dhsohoo+++s/:/`   /`   
+   .:      ++sosyhyyyyyhssyyo+:    /`   
+   .:     -syosyhsso/++hoss+/o:    /`   
+   .:   .-//+:+.:so:.:`oo/-.-:.    /`   
+   .:  .//::-`..:so.+/:sso/.`      /`   
+   .: `-/::+oooo+yyssssyysso/`` .::/`   
+   `/.......-:o+/:-.----........::/+`   
+Y   ````````````````````````````````   Z"""
 
 
 ##########################  EJECUCION DEL JUEGO  #############################################
 
-
+imgcompleta = list(image.image1)
+@dataclass
+class render:
+    contadorfila = 1
+    contadorcaract1 = 0
+    contadorcaract2 = 40
+    imagen1 = {}
+    lista = []
+    imagen2 = imagen1
+    imagen3 = imagen2
+    store = {}
+    @classmethod
+    def guardar (cls, contadorfila, contadorcaract1, contadorcaract2):
+            while (cls.contadorfila < 30):
+                fila = imgcompleta[cls.contadorcaract1:cls.contadorcaract2]
+                cls.contadorcaract1 += 41
+                cls.contadorcaract2 += 41
+                cls.imagen1["{}".format(cls.contadorfila)] = fila
+                cls.contadorfila += 1
+                #print(cls.imagen1)
+    @classmethod
+    def dicalist (cls, diccionario):
+        
+        cls.lista = list(diccionario.values())
+        x = ''.join(str(e) for e in cls.lista)
+        #print(x)
+        makeitastring = ''.join(map(str, cls.lista))
+        #print(makeitastring)
+    @classmethod    
+    def printear(cls, diccionario):
+        for value in diccionario.values():
+            makeitastring = ''.join(map(str, value))
+            print(makeitastring)
+    @classmethod
+    def unirdic(cls, diccionario1, diccionario2, diccionario3):
+        for valor in diccionario1.keys():
+            cls.store["{}".format(valor)] = diccionario1[valor] + diccionario2[valor] + diccionario3[valor]
+            #print (cls.store)
 # Partida
-partida = Partida()
 
-partida.crear()
+#print(image.image1)
+render.guardar(render.contadorfila, render.contadorcaract1, render.contadorcaract2)
+render.dicalist(render.imagen1)
+#render.printear(render.imagen1)
+#print(render.imagen2)
+render.unirdic(render.imagen1,render.imagen2, render.imagen3)
+render.printear(render.store)
+#partida = Partida()
+#print (image.image1, image.image1)
+#partida.crear()
