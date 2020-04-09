@@ -1,0 +1,48 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "RunServerAndTwoClients",
+            "type": "shell",
+            "dependsOn": ["RunServer", "RunClientOne", "RunClientTwo"]
+        },
+        {
+            "label": "RunServer",
+            "type": "shell",
+            "command": "python server.py",
+            "options": {
+                "cwd": "${workspaceRoot}/multijugador"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "RunClientOne",
+            "type": "shell",
+            "command": "python client.py",
+            "options": {
+                "cwd": "${workspaceRoot}/multijugador"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "RunClientTwo",
+            "type": "shell",
+            "command": "python client.py",
+            "options": {
+                "cwd": "${workspaceRoot}/multijugador"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        }
+    ]
+}
