@@ -143,12 +143,12 @@ class Truco:
     QuienCanta: "jugador" = None
     SiloSabeCante: "jugador" = None
     ElQueAcepta: "jugador" = None
-    SeTerminoElTruco: bool = False
+    NoSeAceptoElTruco: bool = False
     
     # la idea seria que al comienzo de la ronda se cree un objeto truco para que valla llevando la gestion del truco durante toda la ronda
     def cantarTruco(self, cantante: "jugador", aceptante: "jugador"):
         #Primero fijarse si se puede cantar truco y si el que canta puede cantarlo
-        if(not self.SeTerminoElTruco and (self.SiloSabeCante == cantante or self.SiloSabeCante == None) and (self.EstadoTruco != EstadoTruco.valecuatro) ):
+        if(not self.NoSeAceptoElTruco and (self.SiloSabeCante == cantante or self.SiloSabeCante == None) and (self.EstadoTruco != EstadoTruco.valecuatro) ):
 
             siguienteNivelTruco = Truco.nextEstadoTruco(self.EstadoTruco)
             print("{} queres cantar {}? 1/si 2/no".format(cantante.Nombre, siguienteNivelTruco.name))
@@ -173,7 +173,7 @@ class Truco:
                 else: # Si no acepta el truco
                     print("NO quiero") # Muestro que no se quiso
                     self.EstadoTruco = Truco.previousEstadoTruco(self.EstadoTruco) # Actualizo el Estado del Truco a un nivel anterior, ya que lo que se canto no se quiso, ej si no queres valecuatro, se pasa a retruco.
-                    self.SeTerminoElTruco = True # Siempre que no se quiera el truco, el truco se termina
+                    self.NoSeAceptoElTruco = True # Siempre que no se quiera el truco, el truco se termina
            
           
     @staticmethod
@@ -237,7 +237,7 @@ class Ronda:
         self.Truco.cantarTruco(cantante= jugador1, aceptante= jugador2) # Le pregunta al jugador 1 si quiere cantar truco
         self.Truco.cantarTruco(cantante= jugador2, aceptante= jugador1) # Le pregunta al jugador 2 si quiere cantar truco
         
-        if(self.Truco.SeTerminoElTruco) #Aca hay que diferenciar si se termino el truco pq no se acepto, no se puede cantar pq se acepto el valecuatro 
+        if(self.Truco.NoSeAceptoElTruco) #Aca hay que diferenciar si se termino el truco pq no se acepto, no se puede cantar pq se acepto el valecuatro 
 
         # El truco te dice por cuantos puntos es la apuesta, es decir truco = 2 o retruco = 3
         #La ronda sabe quien gano las jugadas, por lo tanto cuando termina la ronda esta asigna los puntos a los jugadores
