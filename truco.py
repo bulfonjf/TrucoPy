@@ -36,16 +36,24 @@ from dataclasses import dataclass, field
 from typing import List
 from random import sample, choice
 from enum import IntEnum
+<<<<<<< HEAD
 from rx.subject import Subject
 
 subject_mostrarCartas = Subject()
 subject_mostrarCartas.subscribe( lambda x: print("{0}".format(x)))
+=======
+
+>>>>>>> origin/master
 class EstadoTruco(IntEnum):
     nosecanto = 1
     truco = 2
     retruco = 3
     valecuatro = 4
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> origin/master
 class RespuestaSiNo(IntEnum):
     si = 1
     no = 2
@@ -149,6 +157,7 @@ class Truco:
     QuienCanta: "jugador" = None
     SiloSabeCante: "jugador" = None
     ElQueAcepta: "jugador" = None
+<<<<<<< HEAD
     PuntajeRonda = 0
     SeTerminoElTruco = False
     
@@ -174,11 +183,33 @@ class Truco:
 
                 # Muestro el canto
                 print("{} canto {}".format(cantante.Nombre, EstadoTruco(cls.EstadoTruco).name)) #Ej: Mauro canto retruco
+=======
+    NoSeAceptoElTruco: bool = False
+    
+    # la idea seria que al comienzo de la ronda se cree un objeto truco para que valla llevando la gestion del truco durante toda la ronda
+    def cantarTruco(self, cantante: "jugador", aceptante: "jugador"):
+        #Primero fijarse si se puede cantar truco y si el que canta puede cantarlo
+        if(not self.NoSeAceptoElTruco and (self.SiloSabeCante == cantante or self.SiloSabeCante == None) and (self.EstadoTruco != EstadoTruco.valecuatro) ):
+
+            siguienteNivelTruco = Truco.nextEstadoTruco(self.EstadoTruco)
+            print("{} queres cantar {}? 1/si 2/no".format(cantante.Nombre, siguienteNivelTruco.name))
+            aceptoCantarTruco = RespuestaSiNo(int(input()))
+
+            if(aceptoCantarTruco == RespuestaSiNo.si): # Aca se esta queriendo cantar el truco
+                self.EstadoTruco = siguienteNivelTruco # Actualizo el valor de EstadoTruco al nivel que se esta cantando
+                self.QuienCanta = cantante # Guardo al que canto el truco
+                self.ElQueAcepta = aceptante # Guardo al que acepto el truco
+                self.SiloSabeCante = aceptante # Le doy la potestad al que acepto al truco para retrucar
+               
+                # Muestro el canto
+                print("{} canto {}".format(cantante.Nombre, self.EstadoTruco.name)) #Ej: Mauro canto retruco
+>>>>>>> origin/master
 
                 # Pregunto al otro jugador si acepta
                 print("{} aceptas? 1/si 2/no".format(aceptante.Nombre))
-                respuestaAceptante = RespuestaSiNo(int(input())) # transformo el input del usuario en un numero, y despues en un objeto RespuestaSiNo
+                aceptoTruco = RespuestaSiNo(int(input())) # transformo el input del usuario en un numero, y despues en un objeto RespuestaSiNo
                 
+<<<<<<< HEAD
                 if(respuestaAceptante == RespuestaSiNo.si):
                     print("Quiero")
                     cls.PuntajeRonda = cls.EstadoTruco
@@ -199,14 +230,34 @@ class Truco:
                     
 
     
+=======
+                if(aceptoTruco == RespuestaSiNo.si): # Si el aceptante acepta
+                    print("quiero") # Muestro que se quiso
+                    self.cantarTruco(aceptante, cantante) # aca hacemos una funcion recursiva, es decir una funcion que se llama a si misma
+                else: # Si no acepta el truco
+                    print("NO quiero") # Muestro que no se quiso
+                    self.EstadoTruco = Truco.previousEstadoTruco(self.EstadoTruco) # Actualizo el Estado del Truco a un nivel anterior, ya que lo que se canto no se quiso, ej si no queres valecuatro, se pasa a retruco.
+                    self.NoSeAceptoElTruco = True # Siempre que no se quiera el truco, el truco se termina
+           
+          
+    @staticmethod
+    def nextEstadoTruco(estadoTruco):
+        proximoNivelDeTruco= {
+            EstadoTruco.nosecanto: EstadoTruco.truco,
+            EstadoTruco.truco: EstadoTruco.retruco,
+            EstadoTruco.retruco: EstadoTruco.valecuatro
+        }
+        return proximoNivelDeTruco.get(estadoTruco, "Ese estado de truco no existe")
+>>>>>>> origin/master
 
-        # funcion cantar truco (quien canta, el que acepta, silosabecante, contador nivel)
-        # comprueba el ContadorNivelTruco
-        # evaluar variable si silosabecante = quiencanta
-        # jugadorcanta uno quiere cantar?
-        #     jugador que acepta ?
-        #     contador nivel + 1
-        #     silosabecante = elqueacepta
+    @staticmethod
+    def previousEstadoTruco(estadoTruco):
+        anteriorNivelDeTruco= {
+            EstadoTruco.truco: EstadoTruco.nosecanto,
+            EstadoTruco.retruco: EstadoTruco.truco,
+            EstadoTruco.valecuatro: EstadoTruco.retruco,    
+        }
+        return anteriorNivelDeTruco.get(estadoTruco, "Ese estado de truco no existe ñery")
 
 @dataclass
 #class EstadoRonda:
@@ -228,32 +279,39 @@ class EstadoEnvido:
 class Ronda:
     Mazo: "Mazo" = None
     Truco: "Truco" = None
+<<<<<<< HEAD
     #Jugador1: "Jugador" 
     #Jugador2: "Jugador"
     #PuntajeTruco = 0
+=======
+    
+>>>>>>> origin/master
     # - Al comenzar la ronda, generar un nuevo mazo
     # - Asignarle las cartas a los jugadores
     def iniciar(self, jugador1: "Jugador", jugador2: "Jugador"):
         
-        self.Truco = Truco() # el estado del truco en este momento es nosecanto
-        self.Mazo = Mazo()
+        self.Truco = Truco() # Inicializo el truco
+        self.Mazo = Mazo() # Inicializo el mazo (basicamente se crea el mazo)
         
-        jugador1.Mano.Cartas.clear()
-        jugador2.Mano.Cartas.clear()
+        jugador1.Mano.Cartas.clear() # Elimino las cartas que tenia el jugador anteriormente en la mano
+        jugador2.Mano.Cartas.clear() # Elimino las cartas que tenia el jugador anteriormente en la mano
         
         # Este codigo se ejectua 3 veces. Reparte tres cartas.
         for _ in range(3):
-            # opcion A
-            # self.repartirJugador1(jugador1)
-            # o, la opcion B    
-            jugador1.Mano.Cartas.append(self.repartir())
-            jugador2.Mano.Cartas.append(self.repartir())
+            jugador1.Mano.Cartas.append(self.repartir()) # Le doy 1 carta al jugador 1
+            jugador2.Mano.Cartas.append(self.repartir()) # Le doy 1 carta al jugador 2
         
+<<<<<<< HEAD
         # mostar las cartas de cada jugador (opcion B)
         #subject_mostrarCartas.on_next(jugador1.Cartas)
         #subject_mostrarCartas.on_next(jugador2.Cartas)
         jugador1.mostrarCartas()
         jugador2.mostrarCartas()
+=======
+        # mostar todas las cartas de cada jugador
+        jugador1.mostrarCartas() # las 3 cartas del jugador 1
+        jugador2.mostrarCartas() # las tres cartas del jugador 2
+>>>>>>> origin/master
 
         # Casos de Uso
         # Primera Segunda
@@ -271,19 +329,25 @@ class Ronda:
         
         # --------- PRIMER TURNO DE AMBOS JUGADORES
         # Turno Jugador A
-        #PuntosTruco = 0
-        #PuntosTruco += Turno().cantarTruco(jugador1, jugador2, PuntosTruco)
+        self.Truco.cantarTruco(cantante= jugador1, aceptante= jugador2) # Le pregunta al jugador 1 si quiere cantar truco
+        self.Truco.cantarTruco(cantante= jugador2, aceptante= jugador1) # Le pregunta al jugador 2 si quiere cantar truco
         
+<<<<<<< HEAD
         while ( not Truco.SeTerminoElTruco):
             self.Truco.cantarTruco(jugador1, jugador2)
             self.Truco.cantarTruco(jugador2,jugador1)
         
         cartaJugadaJugadorA = Turno().iniciar(jugador1)
+=======
+        if(self.Truco.NoSeAceptoElTruco) #Aca hay que diferenciar si se termino el truco pq no se acepto, no se puede cantar pq se acepto el valecuatro 
+
+        # El truco te dice por cuantos puntos es la apuesta, es decir truco = 2 o retruco = 3
+        #La ronda sabe quien gano las jugadas, por lo tanto cuando termina la ronda esta asigna los puntos a los jugadores
+        cartaJugadaJugadorA = Turno().iniciar(jugador1) # Inicia el turno con el jugador 1, lo cual le muestra sus cartas y le pregunta cual quiere jugar. La funcion "iniciar" de Turno te devuelve la carta que se jugo
+>>>>>>> origin/master
 
         # Turno Jugador B
-        #PuntosTruco += Turno().cantarTruco(jugador2, jugador1, PuntosTruco)
-        
-        cartaJugadaJugadorB = Turno().iniciar(jugador2)
+        cartaJugadaJugadorB = Turno().iniciar(jugador2) # Inicia el turno con el jugador 1, lo cual le muestra sus cartas y le pregunta cual quiere jugar. La funcion "iniciar" de Turno te devuelve la carta que se jugo
        
         # Comparar las cartas jugadas para saber quien gano esa jugada
         segundoJugada1 = None
@@ -291,7 +355,7 @@ class Ronda:
         hayTercera = False
         ganadorRonda = None
 
-        if(cartaJugadaJugadorA > cartaJugadaJugadorB):
+        if(cartaJugadaJugadorA > cartaJugadaJugadorB): # Se compara el valor de las cartas para saber quien gano
             primeroJugada1 = jugador1
             segundoJugada1 = jugador2
             
@@ -304,19 +368,14 @@ class Ronda:
             segundoJugada1 = jugador2
             PrimeraEmpate = True
             
-        print("Continua {}".format(primeroJugada1.Nombre))
+        print("Continua {}".format(primeroJugada1.Nombre)) # Muestra en la consola el nombre del jugador que va a ser mano en el turno 2
       
         # --------- SEGUNDO TURNO DE AMBOS JUGADORES  
         # Turno Jugador A
-        #PuntosTruco += Turno().cantarTruco(primeroJugada1, segundoJugada1, PuntosTruco)
-        
-       
-        cartaJugadaJugadorA = Turno().iniciar(primeroJugada1)
+        cartaJugadaJugadorA = Turno().iniciar(primeroJugada1) # Inicia el turno con el jugador mano, lo cual le muestra sus cartas y le pregunta cual quiere jugar. La funcion "iniciar" de Turno te devuelve la carta que se jugo
 
         # Turno Jugador B
-        #PuntosTruco += Turno().cantarTruco(segundoJugada1, primeroJugada1, PuntosTruco)
-        
-        cartaJugadaJugadorB = Turno().iniciar(segundoJugada1)
+        cartaJugadaJugadorB = Turno().iniciar(segundoJugada1) # Inicia el turno con el jugador segundo en el turno, lo cual le muestra sus cartas y le pregunta cual quiere jugar. La funcion "iniciar" de Turno te devuelve la carta que se jugo
         
         # Comparar las cartas jugadas para saber quien gano esa jugada
         primeroJugada2 = None
@@ -351,19 +410,15 @@ class Ronda:
 
         # --------- TERCER TURNO DE AMBOS JUGADORES
         # Verificar, si hubo un jugador que ya gano dos turnos entonces el tercer turno no se realiza
-        if(hayTercera):
+        if(hayTercera): # Si hay que jugar la tercer mano
 
-            print("Continua {}".format(primeroJugada2.Nombre))
+            print("Continua {}".format(primeroJugada2.Nombre)) # Muestro en consola el nombre del jugador que es mano
 
             # Turno Jugador A
-            #PuntosTruco += Turno().cantarTruco(primeroJugada2, segundoJugada2, PuntosTruco)
-            
-            cartaJugadaJugadorA = Turno().iniciar(primeroJugada2)
+            cartaJugadaJugadorA = Turno().iniciar(primeroJugada2)  # Inicia el turno con el jugador segundo en el turno, lo cual le muestra sus cartas y le pregunta cual quiere jugar. La funcion "iniciar" de Turno te devuelve la carta que se jugo
 
             # Turno Jugador B
-            #PuntosTruco += Turno().cantarTruco(segundoJugada2, primeroJugada2, PuntosTruco)
-            
-            cartaJugadaJugadorB = Turno().iniciar(segundoJugada2)
+            cartaJugadaJugadorB = Turno().iniciar(segundoJugada2)  # Inicia el turno con el jugador segundo en el turno, lo cual le muestra sus cartas y le pregunta cual quiere jugar. La funcion "iniciar" de Turno te devuelve la carta que se jugo
         
             # Comparar las cartas jugadas para saber quien gano esa jugada
 
@@ -377,11 +432,17 @@ class Ronda:
                 ganadorRonda = primeroJugada1 # TODO aca le estamos dando por ganado al que era mano en la primer jugada, pero habria que ver si tenemos que evaluar si el jugador segundo gano la primer jugada
               
         # Fin de tercero turno de ambos jugadores
-                
+
         # Se muestra el ganador
+<<<<<<< HEAD
             
         print("Gano la ronda {} e hizo {} puntos".format(ganadorRonda.Nombre, Truco.PuntajeRonda))
             
+=======
+        print("Gano la ronda {}, hizo {} puntos".format(ganadorRonda.Nombre, int(self.Truco.EstadoTruco))) # Mostramos quien gano la ronda, y el puntaje del estado del truco #TODO estamos dejandolo asi momentaneamente, ya que los puntos de la rondo incluirian el del envido tamb
+
+       
+>>>>>>> origin/master
     # - Crear una funcion Comenzar en la clase ronda que devuelva 3 cartas del mazo y las quite del mazo
     def repartir(self):
         carta = choice(self.Mazo.Cartas)
@@ -408,6 +469,7 @@ class Ronda:
         return carta
         #print("Carta {}".format(self.carta))
 
+<<<<<<< HEAD
           
               
    
@@ -421,6 +483,10 @@ class Turno:
             contador += 1
             manoimpresa.append("opcion {}: {}".format(contador, carta))
         print(manoimpresa)    
+=======
+@dataclass
+class Turno:
+>>>>>>> origin/master
     @staticmethod
     def iniciar(jugador: "Jugador") -> "Carta":
         print("                       ")
