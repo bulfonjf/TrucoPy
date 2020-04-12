@@ -56,6 +56,10 @@ class RespuestaSiNo(IntEnum):
     si = 1
     no = 2
 
+def printOrNotPrint(*objects):
+    if logs:
+        print(*objects)
+
 def make_french_deck():
     return [Carta(14, "Espada", "Uno de"), Carta(9, "Espada", "Dos de"),Carta(10, "Espada", "Tres de"), Carta(1, "Espada", "Cuatro de"), Carta(2, "Espada", "Cinco de"), Carta(3, "Espada", "Seis de"),Carta(12, "Espada", "Siete de"), Carta(5, "Espada", "Sota de"), Carta(6, "Espada", "Caballo de"), Carta(7, "Espada", "Rey de"), Carta(13, "Basto", "Uno de"), Carta(9, "Basto", "Dos de"),Carta(10, "Basto", "Tres de"), Carta(1, "Basto", "Cuatro de"), Carta(2, "Basto", "Cinco de"), Carta(3, "Basto", "Seis de"),Carta(4, "Basto", "Siete de"), Carta(5, "Basto", "Sota de"), Carta(6, "Basto", "Caballo de"), Carta(7, "Basto", "Rey de"), Carta(8, "Copa", "Uno de"), Carta(9, "Copa", "Dos de"),Carta(10, "Copa", "Tres de"), Carta(1, "Copa", "Cuatro de"), Carta(2, "Copa", "Cinco de"), Carta(3, "Copa", "Seis de"),Carta(4, "Copa", "Siete de"), Carta(5, "Copa", "Sota de"), Carta(6, "Copa", "Caballo de"), Carta(7, "Copa", "Rey de"), Carta(8, "Oro", "Uno de"), Carta(9, "Oro", "Dos de"),Carta(10, "Oro", "Tres de"), Carta(1, "Oro", "Cuatro de"), Carta(2, "Oro", "Cinco de"), Carta(3, "Oro", "Seis de"),Carta(4, "Oro", "Siete de"), Carta(5, "Oro", "Sota de"), Carta(6, "Oro", "Caballo de"), Carta(7, "Oro", "Rey de") ]
 
@@ -66,7 +70,7 @@ class Carta:
     Palo: str
     Nombre: str
 
-    # STR y REPR son cuando alguien hace #print(carta) se muestre solo el nombre y el palo (con un espacio en el medio)
+    # STR y REPR son cuando alguien hace printOrNotPrint(carta) se muestre solo el nombre y el palo (con un espacio en el medio)
     def __str__(self):
         return "{} {}".format(self.Nombre, self.Palo)
     
@@ -100,9 +104,8 @@ class Jugador:
     PuntajeRonda: int = 0
     # - Crear una funcion MostrarCartas que muestres las cartas de la mano
     def mostrarCartas(self):
-        #print(self.Nombre)
-        #print(self.Mano.Cartas)
-        pass
+        printOrNotPrint(self.Nombre)
+        printOrNotPrint(self.Mano.Cartas)
 
 @dataclass
 class Mano:
@@ -118,10 +121,10 @@ class Partida:
     Rondas: ["Ronda"] = field(default_factory=list)
     # - Crear una funcion CrearPartida en la clase partida que le permita al usuario ingresar el nombre del jugador 1 y el nombre del jugador 2
     def crear(self):
-        #print("Estas creando una partida nueva")
-        #print("Ingresa el nombre del jugador 1")
+        printOrNotPrint("Estas creando una partida nueva")
+        printOrNotPrint("Ingresa el nombre del jugador 1")
         nombreJugador1 = input()
-        #print("Ingresa el nombre del jugador 2")
+        printOrNotPrint("Ingresa el nombre del jugador 2")
         nombreJugador2 = input()
 
         self.Jugador1 = Jugador(nombreJugador1, "Azul", Mano())
@@ -142,8 +145,8 @@ class Partida:
     
     # - Crear una funcion MostrarScore en la clase partida que muestre el score del jugador 1 y el score del jugador 2
     def mostrarscore(self):
-        #print("Puntuacion {}: {}".format(self.Jugador1.Nombre, self.PuntuacionJugador1))
-        #print("Puntuacion {}: {}".format(self.Jugador2.Nombre, self.PuntuacionJugador2))
+        printOrNotPrint("Puntuacion {}: {}".format(self.Jugador1.Nombre, self.PuntuacionJugador1))
+        printOrNotPrint("Puntuacion {}: {}".format(self.Jugador2.Nombre, self.PuntuacionJugador2))
         pass
   
     # - Crear una ronda
@@ -167,7 +170,7 @@ class Truco:
         if(ambienteProduccion):
             if(not self.NoSeAceptoElTruco and (self.SiloSabeCante == cantante or self.SiloSabeCante == None) and (self.EstadoTruco != EstadoTruco.valecuatro)):
                 siguienteNivelTruco = Truco.nextEstadoTruco(self.EstadoTruco)
-                #print("{} queres cantar {}? 1/si 2/no".format(cantante.Nombre, siguienteNivelTruco.name))
+                printOrNotPrint("{} queres cantar {}? 1/si 2/no".format(cantante.Nombre, siguienteNivelTruco.name))
                 aceptoCantarTruco = RespuestaSiNo(int(input()))
 
                 if(aceptoCantarTruco == RespuestaSiNo.si): # Aca se esta queriendo cantar el truco
@@ -177,17 +180,17 @@ class Truco:
                     self.SiloSabeCante = aceptante # Le doy la potestad al que acepto al truco para retrucar
                 
                     # Muestro el canto
-                    #print("{} canto {}".format(cantante.Nombre, self.EstadoTruco.name)) #Ej: Mauro canto retruco
+                    printOrNotPrint("{} canto {}".format(cantante.Nombre, self.EstadoTruco.name)) #Ej: Mauro canto retruco
 
                     # Pregunto al otro jugador si acepta
-                    #print("{} aceptas? 1/si 2/no".format(aceptante.Nombre))
+                    printOrNotPrint("{} aceptas? 1/si 2/no".format(aceptante.Nombre))
                     aceptoTruco = RespuestaSiNo(int(input())) # transformo el input del usuario en un numero, y despues en un objeto RespuestaSiNo
                     
                     if(aceptoTruco == RespuestaSiNo.si): # Si el aceptante acepta
-                        #print("quiero") # Muestro que se quiso
+                        printOrNotPrint("quiero") # Muestro que se quiso
                         self.cantarTruco(aceptante, cantante) # aca hacemos una funcion recursiva, es decir una funcion que se llama a si misma
                     else: # Si no acepta el truco
-                        #print("NO quiero") # Muestro que no se quiso
+                        printOrNotPrint("NO quiero") # Muestro que no se quiso
                         self.EstadoTruco = Truco.previousEstadoTruco(self.EstadoTruco) # Actualizo el Estado del Truco a un nivel anterior, ya que lo que se canto no se quiso, ej si no queres valecuatro, se pasa a retruco.
                         self.NoSeAceptoElTruco = True # Siempre que no se quiera el truco, el truco se termina
         else: # solo para testing, modo croto
@@ -381,7 +384,7 @@ class Ronda:
             cartaJugadaJugadorB = Turno.iniciar(PerdedorSegunda)  # Inicia el turno con el jugador segundo en el turno, lo cual le muestra sus cartas y le pregunta cual quiere jugar. La funcion "iniciar" de Turno te devuelve la carta que se jugo
         
             # Comparar las cartas jugadas para saber quien gano esa jugada
-            GanadorTercera, PerdedorTercera = self.EvaluacionCarta.evaluarCarta(GanadorSegunda, PerdedorSegunda, cartaJugadaJugadorA, cartaJugadaJugadorB)
+            self.EvaluacionCarta.evaluarCarta(GanadorSegunda, PerdedorSegunda, cartaJugadaJugadorA, cartaJugadaJugadorB)
             
             break
            
@@ -392,7 +395,7 @@ class Ronda:
         else:
             self.GanadorRonda = self.EvaluacionCarta.GanadorRonda
 
-        #print("Gano la ronda {}, hizo {} puntos".format(self.GanadorRonda.Nombre, int(self.Truco.EstadoTruco))) # Mostramos quien gano la ronda, y el puntaje del estado del truco #TODO estamos dejandolo asi momentaneamente, ya que los puntos de la rondo incluirian el del envido tamb
+        printOrNotPrint("Gano la ronda {}, hizo {} puntos".format(self.GanadorRonda.Nombre, int(self.Truco.EstadoTruco))) # Mostramos quien gano la ronda, y el puntaje del estado del truco #TODO estamos dejandolo asi momentaneamente, ya que los puntos de la rondo incluirian el del envido tamb
 
         
     # - Crear una funcion Comenzar en la clase ronda que devuelva 3 cartas del mazo y las quite del mazo
@@ -400,10 +403,8 @@ class Ronda:
         carta = choice(self.Mazo.Cartas)
         self.Mazo.Cartas.remove(carta)
         if(carta in self.Mazo.Cartas):
-            #print("Error, la carta repartida esta duplicada en el mazo o no fue removida. Carta: {}".format(carta))
+            printOrNotPrint("Error, la carta repartida esta duplicada en el mazo o no fue removida. Carta: {}".format(carta))
             pass
-
-
         return carta
         
 
@@ -411,33 +412,31 @@ class Ronda:
         carta = choice(self.Mazo.Cartas)
         self.Mazo.Cartas.remove(carta)
         return carta
-        #print("Carta {}".format(self.carta))
     
     def repartirJugador2(self):
         carta = choice(self.Mazo.Cartas)
         self.Mazo.Cartas.remove(carta)
         return carta
-        #print("Carta {}".format(self.carta))
 
 @dataclass
 class Turno:
     @staticmethod
     def iniciar(jugador: "Jugador") -> "Carta":
-        #print("                       ")
-        #print("Jugador {} comienza tu turno".format(jugador.Nombre))
-        #print("Jugador {} Indique que carta va a jugar? elija con el numero 1 2 o 3. ".format(jugador.Nombre))
+        printOrNotPrint("                       ")
+        printOrNotPrint("Jugador {} comienza tu turno".format(jugador.Nombre))
+        printOrNotPrint("Jugador {} Indique que carta va a jugar? elija con el numero 1 2 o 3. ".format(jugador.Nombre))
         contador = 0
         for carta in jugador.Mano.Cartas:
             contador += 1
-            #print("opcion {}: {}".format(contador, carta))
+            printOrNotPrint("opcion {}: {}".format(contador, carta))
         if(ambienteProduccion):
             cartaAJugarIndice = int(input()) - 1
         else:
             cartaAJugarIndice = 0 # en modo testing siempre juega la primera que tenga
         cartaAJugar = jugador.Mano.Cartas[cartaAJugarIndice]
         jugador.Mano.Cartas.remove(cartaAJugar)
-        #print("{} juega la carta {}".format(jugador.Nombre, cartaAJugar))
-        #print("                       ")
+        printOrNotPrint("{} juega la carta {}".format(jugador.Nombre, cartaAJugar))
+        printOrNotPrint("                       ")
 
         return cartaAJugar
 
@@ -486,37 +485,10 @@ imagen2 = r"""/__   \_ __ _   _  ___ ___     / _ \___ _ __ ___  _ __ (_)___| |_ 
 
 def testingSeguro(testACorrer):
     try:
-        #print(testACorrer.__name__)
+        print(testACorrer.__name__)
         return testACorrer()
     except Exception as err:
         return "False, {}".format(err)
-
-def testing1GanaPeron():
-    manoDePeron = Mano([Carta(2, "Uno de", "Espada"), Carta(2, "Uno de", "Palo"), Carta(2, "Siete de", "Espada") ])
-    manoDeEvita = Mano([Carta(1, "Espada", "Dos de"),Carta(2, "Espada", "Tres de"), (2, "Oro", "Seis de")])
-    peron = Jugador("peron", "nacionalsocialista", manoDePeron)
-    evita = Jugador("evita", "izquierda", manoDeEvita)
-    partida = Partida()
-    partida.crearTesting(peron, evita)
-    return partida.Rondas[0].GanadorRonda == peron
-
-def testing2GanaElSegundo():
-    manoDePeron = Mano([Carta(1, "Uno de", "Espada"), Carta(1, "Uno de", "Palo"), Carta(2, "Siete de", "Espada") ])
-    manoDeEvita = Mano([Carta(2, "Espada", "Dos de"),Carta(2, "Espada", "Tres de"), (2, "Oro", "Seis de")])
-    peron = Jugador("peron", "nacionalsocialista", manoDePeron)
-    evita = Jugador("evita", "izquierda", manoDeEvita)
-    partida = Partida()
-    partida.crearTesting(peron, evita)
-    return partida.Rondas[0].GanadorRonda == evita # devuelve true si el test da exito o false si fallo
-
-def testing3EmpatePrimeraYGanaElPrimero():
-    manoDePeron = Mano([Carta(1, "Uno de", "Espada"), Carta(2, "Uno de", "Palo"), Carta(2, "Siete de", "Espada") ])
-    manoDeEvita = Mano([Carta(1, "Espada", "Dos de"),Carta(1, "Espada", "Tres de"), (2, "Oro", "Seis de")])
-    peron = Jugador("peron", "nacionalsocialista", manoDePeron)
-    evita = Jugador("evita", "izquierda", manoDeEvita)
-    partida = Partida()
-    partida.crearTesting(peron, evita)
-    return partida.Rondas[0].GanadorRonda == peron # devuelve true si el test da exito o false si fallo
 
 def testGanaMano(cartasMano, cartasNoMano):
     try:
@@ -528,7 +500,7 @@ def testGanaMano(cartasMano, cartasNoMano):
         partida.crearTesting(jugadorMano, jugadorNoMano)
         return partida.Rondas[0].GanadorRonda == jugadorMano # lo que cambia es el jugador que tiene que ganar
     except Exception as err:
-        return False
+        return "False, {}".format(err)
 
 def testGanaNoMano(cartasMano, cartasNoMano):
     try:
@@ -540,27 +512,33 @@ def testGanaNoMano(cartasMano, cartasNoMano):
         partida.crearTesting(jugadorMano, jugadorNoMano)
         return partida.Rondas[0].GanadorRonda == jugadorNoMano
     except Exception as err:
-        return False
+        return "False, {}".format(err)
 
 def ejecutarTestGanaMano(coleccionDeCasos):
+    fallaron = []
     for x in coleccionDeCasos:
         if not testGanaMano(x[0], x[1]):
-            print("fallo gano mano",x[0], x[1])
+            fallaron.append("fallo, se esperaba gano mano {} {}".format(x[0], x[1]))
+    return fallaron
 
 def ejecutarTestGanaNoMano(coleccionDeCasos):
+    fallaron = []
     for x in coleccionDeCasos:
         if not testGanaNoMano(x[0], x[1]):
-            print("fallo gano No mano",x[0], x[1])
+            fallaron.append("fallo, se esperaba No mano {} {}".format(x[0], x[1]))
+    return fallaron
 
 def EsCasoExcepcionNoMano(i,j):
-    return i[0] > j[0] and i[1] < j[1] and i[2] < j[2] # te devuelve true si se da eso, es decir, si i gana primera, pero pierde las otras dos entonces pierde.
+    return i[0] > j[0] and i[1] < j[1] and i[2] < j[2]
 
 def EsCasoExcepcionMano(i,j):
     return i[0] < j[0] and i[1] > j[1] and i[2] > j[2]
 
 def runTests():
     global ambienteProduccion
+    global logs
     ambienteProduccion = False
+    logs = False
 
     colección = []
     valorePosibles = range(3)
@@ -570,14 +548,6 @@ def runTests():
                 listaAuxiliar = [i,j,g]
                 if listaAuxiliar not in colección:
                     colección.append(listaAuxiliar)
-
-    # coleccionDosD = [] # esto genera un array de dos dimensiones, cada fila es un [i,j,g] y cada columna es un [i,j,g], igual que como lo hice mas arriba
-    #exacto dos niveles, fijate que no tiene mas que eso.
-    # listaauxiliar es variable dentro del for, despues del for muere.
-    # for x in colección: # aca estoy generando collecionDosD, es el comentario de arriba, la variable de linea 25.
-    #     for j in colección:
-    #         listaAuxiliar = [x,j]
-    #         coleccionDosD.append(listaAuxiliar) 
 
     testsGanaMano = []
     testsGanaNoMano = []
@@ -594,39 +564,31 @@ def runTests():
             else:
                 testsGanaNoMano.append([i,j])
     
-    #print(" ========== Tes
-    # ts ==========")
-    #print("testsGanaMano:", len(testsGanaMano))
-    #print("testsGanaNoMano:", len(testsGanaNoMano))
-    ejecutarTestGanaMano(testsGanaMano)
-    ejecutarTestGanaNoMano(testsGanaNoMano)
-    #print(" ========== Fin Tests ==========")
-
-    # tests = {
-    #     testing1GanaPeron.__name__: testingSeguro(testing1GanaPeron),
-    #     testing2GanaElSegundo.__name__: testingSeguro(testing2GanaElSegundo),
-    #     testing3EmpatePrimeraYGanaElPrimero.__name__: testingSeguro(testing3EmpatePrimeraYGanaElPrimero),
-    # }
-    # #print(" ========== Tests con exito", sum(result == True for result in tests.values()), "/", len(tests) ,"========== ")
-    # for key, value in tests.items():
-    #     if(value != True and (value == False or "False" in value)):
-    #         #print(color.BOLD, key, ":", value, color.END)
-    #     else: 
-    #         #print(key, ":", value)
-    # #print(" ========== Fin Tests ========== ")
-
+    testsSinExito = []
+    testsSinExito.extend(ejecutarTestGanaMano(testsGanaMano))
+    testsSinExito.extend(ejecutarTestGanaNoMano(testsGanaNoMano))
+    testsSinExito.append("False, error en linea 569")
+    totalTestsLen = len(testsGanaMano) + len(testsGanaNoMano)
+    
+    print(" ========== Tests que fallaron", len(testsSinExito), "/", totalTestsLen, "total ==========")
+    for test in testsSinExito:
+        print(test)
+    print(" ========== Fin Tests ========== ")
+    
 ##########################  EJECUCION DEL JUEGO  #############################################
 
 def runProduccion():
     global ambienteProduccion   
     ambienteProduccion = True
-    #print(imagen)
-    #print(imagen2)
+    global logs
+    logs = True
+    printOrNotPrint(imagen)
+    printOrNotPrint(imagen2)
     partida = Partida()
     partida.crear()
 
- 
-if args.test:
-    runTests()
-else:
-    runProduccion()
+if __name__ == "__main__":
+    if args.test:
+        runTests()
+    else:
+        runProduccion()
