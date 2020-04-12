@@ -56,7 +56,6 @@ class RespuestaSiNo(IntEnum):
     si = 1
     no = 2
 
-
 def make_french_deck():
     return [Carta(14, "Espada", "Uno de"), Carta(9, "Espada", "Dos de"),Carta(10, "Espada", "Tres de"), Carta(1, "Espada", "Cuatro de"), Carta(2, "Espada", "Cinco de"), Carta(3, "Espada", "Seis de"),Carta(12, "Espada", "Siete de"), Carta(5, "Espada", "Sota de"), Carta(6, "Espada", "Caballo de"), Carta(7, "Espada", "Rey de"), Carta(13, "Basto", "Uno de"), Carta(9, "Basto", "Dos de"),Carta(10, "Basto", "Tres de"), Carta(1, "Basto", "Cuatro de"), Carta(2, "Basto", "Cinco de"), Carta(3, "Basto", "Seis de"),Carta(4, "Basto", "Siete de"), Carta(5, "Basto", "Sota de"), Carta(6, "Basto", "Caballo de"), Carta(7, "Basto", "Rey de"), Carta(8, "Copa", "Uno de"), Carta(9, "Copa", "Dos de"),Carta(10, "Copa", "Tres de"), Carta(1, "Copa", "Cuatro de"), Carta(2, "Copa", "Cinco de"), Carta(3, "Copa", "Seis de"),Carta(4, "Copa", "Siete de"), Carta(5, "Copa", "Sota de"), Carta(6, "Copa", "Caballo de"), Carta(7, "Copa", "Rey de"), Carta(8, "Oro", "Uno de"), Carta(9, "Oro", "Dos de"),Carta(10, "Oro", "Tres de"), Carta(1, "Oro", "Cuatro de"), Carta(2, "Oro", "Cinco de"), Carta(3, "Oro", "Seis de"),Carta(4, "Oro", "Siete de"), Carta(5, "Oro", "Sota de"), Carta(6, "Oro", "Caballo de"), Carta(7, "Oro", "Rey de") ]
 
@@ -514,6 +513,55 @@ def testing3EmpatePrimeraYGanaElPrimero():
     partida = Partida()
     partida.crearTesting(peron, evita)
     return partida.Rondas[0].GanadorRonda == peron # devuelve true si el test da exito o false si fallo
+
+colección = []
+
+valorePosibles = range(3)
+for i in valorePosibles: # genera [i,j,g]
+    for j in valorePosibles:
+        for g in valorePosibles:
+            listaAuxiliar = [i,j,g]
+            if listaAuxiliar not in colección:
+                colección.append(listaAuxiliar)
+
+coleccionDosD = [] # esto genera un array de dos dimensiones, cada fila es un [i,j,g] y cada columna es un [i,j,g], igual que como lo hice mas arriba
+#exacto dos niveles, fijate que no tiene mas que eso.
+# listaauxiliar es variable dentro del for, despues del for muere.
+for x in colección: # aca estoy generando collecionDosD, es el comentario de arriba, la variable de linea 25.
+    for j in colección:
+        listaAuxiliar = [x,j]
+        coleccionDosD.append(listaAuxiliar) 
+
+testsGanaMano = []
+testsGanaNoMano = []
+for i in colección: 
+    for j in colección:
+      if j <= i: testsGanaMano.append(coleccionDosD[i,j]) # i NO ES UN ARRAY, es el indice, entonces i = 0 y j = 0 es la primer celda. Si j <= 0 entonces es que la celda es de la diagonal para abajo, si j>i entonces es la diagonal hacia arriba (sin contar la celda de la diagonal) # aca si tengo que usar coleccionDosD, antes de saber que la necesitaba la cree por las dudas
+      else: testsGanaNoMano.append(coleccionDosD[i,j]) # creo que es asi jajaj.
+
+def ejecutarTestGanaMano(): # esto genera banda de tests
+    map(lambda x: testsGanaMano(x[0], x[1]), testsGanaMano)
+def ejecutarTestGanaNoMano(): # esto genera banda de tests
+    map(lambda x: testsGanaMano(x[0], x[1]), testsGanaMano)
+
+def testGanaMano(cartasMano, cartasNoMano):
+    manoDePeron = Mano([Carta(cartasMano[0], "Uno de", "Espada"), Carta(cartasMano[1], "Uno de", "Palo"), Carta(cartasMano[2], "Siete de", "Espada") ])
+    manoDeEvita = Mano([Carta(cartasNoMano[0], "Espada", "Dos de"),Carta(cartasNoMano[1], "Espada", "Tres de"), (cartasNoMano[2], "Oro", "Seis de")])
+    jugadorMano = Jugador("mano", "Mano", manoDePeron)
+    jugadorNoMano = Jugador("noMano", "NoMano", manoDeEvita)
+    partida = Partida()
+    partida.crearTesting(jugadorMano, jugadorNoMano)
+    return partida.Rondas[0].GanadorRonda == jugadorMano # lo que cambia es el jugador que tiene que ganar
+
+def testGanaNoMano(cartasMano, cartasNoMano):
+    manoDePeron = Mano([Carta(cartasMano[0], "Uno de", "Espada"), Carta(cartasMano[1], "Uno de", "Palo"), Carta(cartasMano[2], "Siete de", "Espada") ])
+    manoDeEvita = Mano([Carta(cartasNoMano[0], "Espada", "Dos de"),Carta(cartasNoMano[1], "Espada", "Tres de"), (cartasNoMano[2], "Oro", "Seis de")])
+    jugadorMano = Jugador("mano", "Mano", manoDePeron)
+    jugadorNoMano = Jugador("noMano", "NoMano", manoDeEvita)
+    partida = Partida()
+    partida.crearTesting(jugadorMano, jugadorNoMano)
+    return partida.Rondas[0].GanadorRonda == jugadorNoMano
+
 
 def runTests():
     global ambienteProduccion
