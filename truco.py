@@ -520,7 +520,7 @@ def testing3EmpatePrimeraYGanaElPrimero():
 def testGanaMano(cartasMano, cartasNoMano):
     try:
         manoDePeron = Mano([Carta(cartasMano[0], "Uno de", "Espada"), Carta(cartasMano[1], "Uno de", "Palo"), Carta(cartasMano[2], "Siete de", "Espada") ])
-        manoDeEvita = Mano([Carta(cartasNoMano[0], "Espada", "Dos de"),Carta(cartasNoMano[1], "Espada", "Tres de"), (cartasNoMano[2], "Oro", "Seis de")])
+        manoDeEvita = Mano([Carta(cartasNoMano[0], "Espada", "Dos de"),Carta(cartasNoMano[1], "Espada", "Tres de"), Carta(cartasNoMano[2], "Oro", "Seis de")])
         jugadorMano = Jugador("mano", "Mano", manoDePeron)
         jugadorNoMano = Jugador("noMano", "NoMano", manoDeEvita)
         partida = Partida()
@@ -532,7 +532,7 @@ def testGanaMano(cartasMano, cartasNoMano):
 def testGanaNoMano(cartasMano, cartasNoMano):
     try:
         manoDePeron = Mano([Carta(cartasMano[0], "Uno de", "Espada"), Carta(cartasMano[1], "Uno de", "Palo"), Carta(cartasMano[2], "Siete de", "Espada") ])
-        manoDeEvita = Mano([Carta(cartasNoMano[0], "Espada", "Dos de"),Carta(cartasNoMano[1], "Espada", "Tres de"), (cartasNoMano[2], "Oro", "Seis de")])
+        manoDeEvita = Mano([Carta(cartasNoMano[0], "Espada", "Dos de"),Carta(cartasNoMano[1], "Espada", "Tres de"), Carta(cartasNoMano[2], "Oro", "Seis de")])
         jugadorMano = Jugador("mano", "Mano", manoDePeron)
         jugadorNoMano = Jugador("noMano", "NoMano", manoDeEvita)
         partida = Partida()
