@@ -100,6 +100,7 @@ class Jugador:
     PuntajeRonda: int = 0
     # - Crear una funcion MostrarCartas que muestres las cartas de la mano
     def mostrarCartas(self):
+        pass
         #print(self.Nombre)
         #print(self.Mano.Cartas)
 
@@ -141,6 +142,7 @@ class Partida:
     
     # - Crear una funcion MostrarScore en la clase partida que muestre el score del jugador 1 y el score del jugador 2
     def mostrarscore(self):
+        pass
         #print("Puntuacion {}: {}".format(self.Jugador1.Nombre, self.PuntuacionJugador1))
         #print("Puntuacion {}: {}".format(self.Jugador2.Nombre, self.PuntuacionJugador2))
   
@@ -398,6 +400,7 @@ class Ronda:
         carta = choice(self.Mazo.Cartas)
         self.Mazo.Cartas.remove(carta)
         if(carta in self.Mazo.Cartas):
+            pass
             #print("Error, la carta repartida esta duplicada en el mazo o no fue removida. Carta: {}".format(carta))
 
         return carta
@@ -541,12 +544,12 @@ def testGanaNoMano(cartasMano, cartasNoMano):
 def ejecutarTestGanaMano(coleccionDeCasos):
     for x in coleccionDeCasos:
         if not testGanaMano(x[0], x[1]):
-            print("fallo",x[0], x[1])
+            print("fallo gano mano",x[0], x[1])
 
 def ejecutarTestGanaNoMano(coleccionDeCasos):
     for x in coleccionDeCasos:
         if not testGanaNoMano(x[0], x[1]):
-            print("fallo",x[0], x[1])
+            print("fallo gano No mano",x[0], x[1])
 
 def runTests():
     global ambienteProduccion
@@ -582,6 +585,8 @@ def runTests():
                 testsGanaNoMano.append([i,j]) # creo que es asi jajaj.
     
     #print(" ========== Tests ==========")
+    print("testsGanaMano:", len(testsGanaMano))
+    print("testsGanaNoMano:", len(testsGanaNoMano))
     ejecutarTestGanaMano(testsGanaMano)
     ejecutarTestGanaNoMano(testsGanaNoMano)
     #print(" ========== Fin Tests ==========")
