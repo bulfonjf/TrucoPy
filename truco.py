@@ -66,7 +66,7 @@ class Carta:
     Palo: str
     Nombre: str
 
-    # STR y REPR son cuando alguien hace print(carta) se muestre solo el nombre y el palo (con un espacio en el medio)
+    # STR y REPR son cuando alguien hace #print(carta) se muestre solo el nombre y el palo (con un espacio en el medio)
     def __str__(self):
         return "{} {}".format(self.Nombre, self.Palo)
     
@@ -100,8 +100,8 @@ class Jugador:
     PuntajeRonda: int = 0
     # - Crear una funcion MostrarCartas que muestres las cartas de la mano
     def mostrarCartas(self):
-        print(self.Nombre)
-        print(self.Mano.Cartas)
+        #print(self.Nombre)
+        #print(self.Mano.Cartas)
 
 @dataclass
 class Mano:
@@ -117,10 +117,10 @@ class Partida:
     Rondas: ["Ronda"] = field(default_factory=list)
     # - Crear una funcion CrearPartida en la clase partida que le permita al usuario ingresar el nombre del jugador 1 y el nombre del jugador 2
     def crear(self):
-        print("Estas creando una partida nueva")
-        print("Ingresa el nombre del jugador 1")
+        #print("Estas creando una partida nueva")
+        #print("Ingresa el nombre del jugador 1")
         nombreJugador1 = input()
-        print("Ingresa el nombre del jugador 2")
+        #print("Ingresa el nombre del jugador 2")
         nombreJugador2 = input()
 
         self.Jugador1 = Jugador(nombreJugador1, "Azul", Mano())
@@ -141,8 +141,8 @@ class Partida:
     
     # - Crear una funcion MostrarScore en la clase partida que muestre el score del jugador 1 y el score del jugador 2
     def mostrarscore(self):
-        print("Puntuacion {}: {}".format(self.Jugador1.Nombre, self.PuntuacionJugador1))
-        print("Puntuacion {}: {}".format(self.Jugador2.Nombre, self.PuntuacionJugador2))
+        #print("Puntuacion {}: {}".format(self.Jugador1.Nombre, self.PuntuacionJugador1))
+        #print("Puntuacion {}: {}".format(self.Jugador2.Nombre, self.PuntuacionJugador2))
   
     # - Crear una ronda
     def crearronda(self) -> "Ronda":
@@ -165,7 +165,7 @@ class Truco:
         if(ambienteProduccion):
             if(not self.NoSeAceptoElTruco and (self.SiloSabeCante == cantante or self.SiloSabeCante == None) and (self.EstadoTruco != EstadoTruco.valecuatro)):
                 siguienteNivelTruco = Truco.nextEstadoTruco(self.EstadoTruco)
-                print("{} queres cantar {}? 1/si 2/no".format(cantante.Nombre, siguienteNivelTruco.name))
+                #print("{} queres cantar {}? 1/si 2/no".format(cantante.Nombre, siguienteNivelTruco.name))
                 aceptoCantarTruco = RespuestaSiNo(int(input()))
 
                 if(aceptoCantarTruco == RespuestaSiNo.si): # Aca se esta queriendo cantar el truco
@@ -175,17 +175,17 @@ class Truco:
                     self.SiloSabeCante = aceptante # Le doy la potestad al que acepto al truco para retrucar
                 
                     # Muestro el canto
-                    print("{} canto {}".format(cantante.Nombre, self.EstadoTruco.name)) #Ej: Mauro canto retruco
+                    #print("{} canto {}".format(cantante.Nombre, self.EstadoTruco.name)) #Ej: Mauro canto retruco
 
                     # Pregunto al otro jugador si acepta
-                    print("{} aceptas? 1/si 2/no".format(aceptante.Nombre))
+                    #print("{} aceptas? 1/si 2/no".format(aceptante.Nombre))
                     aceptoTruco = RespuestaSiNo(int(input())) # transformo el input del usuario en un numero, y despues en un objeto RespuestaSiNo
                     
                     if(aceptoTruco == RespuestaSiNo.si): # Si el aceptante acepta
-                        print("quiero") # Muestro que se quiso
+                        #print("quiero") # Muestro que se quiso
                         self.cantarTruco(aceptante, cantante) # aca hacemos una funcion recursiva, es decir una funcion que se llama a si misma
                     else: # Si no acepta el truco
-                        print("NO quiero") # Muestro que no se quiso
+                        #print("NO quiero") # Muestro que no se quiso
                         self.EstadoTruco = Truco.previousEstadoTruco(self.EstadoTruco) # Actualizo el Estado del Truco a un nivel anterior, ya que lo que se canto no se quiso, ej si no queres valecuatro, se pasa a retruco.
                         self.NoSeAceptoElTruco = True # Siempre que no se quiera el truco, el truco se termina
         else: # solo para testing, modo croto
@@ -390,7 +390,7 @@ class Ronda:
         else:
             self.GanadorRonda = self.EvaluacionCarta.GanadorRonda
 
-        print("Gano la ronda {}, hizo {} puntos".format(self.GanadorRonda.Nombre, int(self.Truco.EstadoTruco))) # Mostramos quien gano la ronda, y el puntaje del estado del truco #TODO estamos dejandolo asi momentaneamente, ya que los puntos de la rondo incluirian el del envido tamb
+        #print("Gano la ronda {}, hizo {} puntos".format(self.GanadorRonda.Nombre, int(self.Truco.EstadoTruco))) # Mostramos quien gano la ronda, y el puntaje del estado del truco #TODO estamos dejandolo asi momentaneamente, ya que los puntos de la rondo incluirian el del envido tamb
 
         
     # - Crear una funcion Comenzar en la clase ronda que devuelva 3 cartas del mazo y las quite del mazo
@@ -398,7 +398,7 @@ class Ronda:
         carta = choice(self.Mazo.Cartas)
         self.Mazo.Cartas.remove(carta)
         if(carta in self.Mazo.Cartas):
-            print("Error, la carta repartida esta duplicada en el mazo o no fue removida. Carta: {}".format(carta))
+            #print("Error, la carta repartida esta duplicada en el mazo o no fue removida. Carta: {}".format(carta))
 
         return carta
         
@@ -407,33 +407,33 @@ class Ronda:
         carta = choice(self.Mazo.Cartas)
         self.Mazo.Cartas.remove(carta)
         return carta
-        #print("Carta {}".format(self.carta))
+        ##print("Carta {}".format(self.carta))
     
     def repartirJugador2(self):
         carta = choice(self.Mazo.Cartas)
         self.Mazo.Cartas.remove(carta)
         return carta
-        #print("Carta {}".format(self.carta))
+        ##print("Carta {}".format(self.carta))
 
 @dataclass
 class Turno:
     @staticmethod
     def iniciar(jugador: "Jugador") -> "Carta":
-        print("                       ")
-        print("Jugador {} comienza tu turno".format(jugador.Nombre))
-        print("Jugador {} Indique que carta va a jugar? elija con el numero 1 2 o 3. ".format(jugador.Nombre))
+        #print("                       ")
+        #print("Jugador {} comienza tu turno".format(jugador.Nombre))
+        #print("Jugador {} Indique que carta va a jugar? elija con el numero 1 2 o 3. ".format(jugador.Nombre))
         contador = 0
         for carta in jugador.Mano.Cartas:
             contador += 1
-            print("opcion {}: {}".format(contador, carta))
+            #print("opcion {}: {}".format(contador, carta))
         if(ambienteProduccion):
             cartaAJugarIndice = int(input()) - 1
         else:
             cartaAJugarIndice = 0 # en modo testing siempre juega la primera que tenga
         cartaAJugar = jugador.Mano.Cartas[cartaAJugarIndice]
         jugador.Mano.Cartas.remove(cartaAJugar)
-        print("{} juega la carta {}".format(jugador.Nombre, cartaAJugar))
-        print("                       ")
+        #print("{} juega la carta {}".format(jugador.Nombre, cartaAJugar))
+        #print("                       ")
 
         return cartaAJugar
 
@@ -482,7 +482,7 @@ imagen2 = r"""/__   \_ __ _   _  ___ ___     / _ \___ _ __ ___  _ __ (_)___| |_ 
 
 def testingSeguro(testACorrer):
     try:
-        print(testACorrer.__name__)
+        #print(testACorrer.__name__)
         return testACorrer()
     except Exception as err:
         return "False, {}".format(err)
@@ -514,83 +514,103 @@ def testing3EmpatePrimeraYGanaElPrimero():
     partida.crearTesting(peron, evita)
     return partida.Rondas[0].GanadorRonda == peron # devuelve true si el test da exito o false si fallo
 
-colección = []
-
-valorePosibles = range(3)
-for i in valorePosibles: # genera [i,j,g]
-    for j in valorePosibles:
-        for g in valorePosibles:
-            listaAuxiliar = [i,j,g]
-            if listaAuxiliar not in colección:
-                colección.append(listaAuxiliar)
-
-coleccionDosD = [] # esto genera un array de dos dimensiones, cada fila es un [i,j,g] y cada columna es un [i,j,g], igual que como lo hice mas arriba
-#exacto dos niveles, fijate que no tiene mas que eso.
-# listaauxiliar es variable dentro del for, despues del for muere.
-for x in colección: # aca estoy generando collecionDosD, es el comentario de arriba, la variable de linea 25.
-    for j in colección:
-        listaAuxiliar = [x,j]
-        coleccionDosD.append(listaAuxiliar) 
-
-testsGanaMano = []
-testsGanaNoMano = []
-for i in colección: 
-    for j in colección:
-      if j <= i: testsGanaMano.append(coleccionDosD[i,j]) # i NO ES UN ARRAY, es el indice, entonces i = 0 y j = 0 es la primer celda. Si j <= 0 entonces es que la celda es de la diagonal para abajo, si j>i entonces es la diagonal hacia arriba (sin contar la celda de la diagonal) # aca si tengo que usar coleccionDosD, antes de saber que la necesitaba la cree por las dudas
-      else: testsGanaNoMano.append(coleccionDosD[i,j]) # creo que es asi jajaj.
-
-def ejecutarTestGanaMano(): # esto genera banda de tests
-    map(lambda x: testsGanaMano(x[0], x[1]), testsGanaMano)
-def ejecutarTestGanaNoMano(): # esto genera banda de tests
-    map(lambda x: testsGanaMano(x[0], x[1]), testsGanaMano)
-
 def testGanaMano(cartasMano, cartasNoMano):
-    manoDePeron = Mano([Carta(cartasMano[0], "Uno de", "Espada"), Carta(cartasMano[1], "Uno de", "Palo"), Carta(cartasMano[2], "Siete de", "Espada") ])
-    manoDeEvita = Mano([Carta(cartasNoMano[0], "Espada", "Dos de"),Carta(cartasNoMano[1], "Espada", "Tres de"), (cartasNoMano[2], "Oro", "Seis de")])
-    jugadorMano = Jugador("mano", "Mano", manoDePeron)
-    jugadorNoMano = Jugador("noMano", "NoMano", manoDeEvita)
-    partida = Partida()
-    partida.crearTesting(jugadorMano, jugadorNoMano)
-    return partida.Rondas[0].GanadorRonda == jugadorMano # lo que cambia es el jugador que tiene que ganar
+    try:
+        manoDePeron = Mano([Carta(cartasMano[0], "Uno de", "Espada"), Carta(cartasMano[1], "Uno de", "Palo"), Carta(cartasMano[2], "Siete de", "Espada") ])
+        manoDeEvita = Mano([Carta(cartasNoMano[0], "Espada", "Dos de"),Carta(cartasNoMano[1], "Espada", "Tres de"), (cartasNoMano[2], "Oro", "Seis de")])
+        jugadorMano = Jugador("mano", "Mano", manoDePeron)
+        jugadorNoMano = Jugador("noMano", "NoMano", manoDeEvita)
+        partida = Partida()
+        partida.crearTesting(jugadorMano, jugadorNoMano)
+        return partida.Rondas[0].GanadorRonda == jugadorMano # lo que cambia es el jugador que tiene que ganar
+    except Exception as err:
+        return False
 
 def testGanaNoMano(cartasMano, cartasNoMano):
-    manoDePeron = Mano([Carta(cartasMano[0], "Uno de", "Espada"), Carta(cartasMano[1], "Uno de", "Palo"), Carta(cartasMano[2], "Siete de", "Espada") ])
-    manoDeEvita = Mano([Carta(cartasNoMano[0], "Espada", "Dos de"),Carta(cartasNoMano[1], "Espada", "Tres de"), (cartasNoMano[2], "Oro", "Seis de")])
-    jugadorMano = Jugador("mano", "Mano", manoDePeron)
-    jugadorNoMano = Jugador("noMano", "NoMano", manoDeEvita)
-    partida = Partida()
-    partida.crearTesting(jugadorMano, jugadorNoMano)
-    return partida.Rondas[0].GanadorRonda == jugadorNoMano
+    try:
+        manoDePeron = Mano([Carta(cartasMano[0], "Uno de", "Espada"), Carta(cartasMano[1], "Uno de", "Palo"), Carta(cartasMano[2], "Siete de", "Espada") ])
+        manoDeEvita = Mano([Carta(cartasNoMano[0], "Espada", "Dos de"),Carta(cartasNoMano[1], "Espada", "Tres de"), (cartasNoMano[2], "Oro", "Seis de")])
+        jugadorMano = Jugador("mano", "Mano", manoDePeron)
+        jugadorNoMano = Jugador("noMano", "NoMano", manoDeEvita)
+        partida = Partida()
+        partida.crearTesting(jugadorMano, jugadorNoMano)
+        return partida.Rondas[0].GanadorRonda == jugadorNoMano
+    except Exception as err:
+        return False
 
+def ejecutarTestGanaMano(coleccionDeCasos):
+    for x in coleccionDeCasos:
+        if not testGanaMano(x[0], x[1]):
+            print("fallo",x[0], x[1])
+
+def ejecutarTestGanaNoMano(coleccionDeCasos):
+    for x in coleccionDeCasos:
+        if not testGanaNoMano(x[0], x[1]):
+            print("fallo",x[0], x[1])
 
 def runTests():
     global ambienteProduccion
     ambienteProduccion = False
-    tests = {
-        testing1GanaPeron.__name__: testingSeguro(testing1GanaPeron),
-        testing2GanaElSegundo.__name__: testingSeguro(testing2GanaElSegundo),
-        testing3EmpatePrimeraYGanaElPrimero.__name__: testingSeguro(testing3EmpatePrimeraYGanaElPrimero),
-    }
-    print(" ========== Tests con exito", sum(result == True for result in tests.values()), "/", len(tests) ,"========== ")
-    for key, value in tests.items():
-        if(value != True and (value == False or "False" in value)):
-            print(color.BOLD, key, ":", value, color.END)
-        else: 
-            print(key, ":", value)
-    print(" ========== Fin Tests ========== ")
+
+    colección = []
+    valorePosibles = range(3)
+    for i in valorePosibles: # genera [i,j,g]
+        for j in valorePosibles:
+            for g in valorePosibles:
+                listaAuxiliar = [i,j,g]
+                if listaAuxiliar not in colección:
+                    colección.append(listaAuxiliar)
+
+    # coleccionDosD = [] # esto genera un array de dos dimensiones, cada fila es un [i,j,g] y cada columna es un [i,j,g], igual que como lo hice mas arriba
+    #exacto dos niveles, fijate que no tiene mas que eso.
+    # listaauxiliar es variable dentro del for, despues del for muere.
+    # for x in colección: # aca estoy generando collecionDosD, es el comentario de arriba, la variable de linea 25.
+    #     for j in colección:
+    #         listaAuxiliar = [x,j]
+    #         coleccionDosD.append(listaAuxiliar) 
+
+    testsGanaMano = []
+    testsGanaNoMano = []
+    for i in colección:
+        for j in colección:
+            if j <= i: 
+                # aca encontro un conjunto de cartas, i es las cartas de mano y j las del no mano
+                # la idea es guardar ese conjunto de cartas en una variable
+                # creo que al final no sirve la coleccionDosD
+                testsGanaMano.append([i,j]) # i NO ES UN ARRAY, es el indice, entonces i = 0 y j = 0 es la primer celda. Si j <= 0 entonces es que la celda es de la diagonal para abajo, si j>i entonces es la diagonal hacia arriba (sin contar la celda de la diagonal) # aca si tengo que usar coleccionDosD, antes de saber que la necesitaba la cree por las dudas
+            else:
+                testsGanaNoMano.append([i,j]) # creo que es asi jajaj.
+    
+    #print(" ========== Tests ==========")
+    ejecutarTestGanaMano(testsGanaMano)
+    ejecutarTestGanaNoMano(testsGanaNoMano)
+    #print(" ========== Fin Tests ==========")
+
+    # tests = {
+    #     testing1GanaPeron.__name__: testingSeguro(testing1GanaPeron),
+    #     testing2GanaElSegundo.__name__: testingSeguro(testing2GanaElSegundo),
+    #     testing3EmpatePrimeraYGanaElPrimero.__name__: testingSeguro(testing3EmpatePrimeraYGanaElPrimero),
+    # }
+    # #print(" ========== Tests con exito", sum(result == True for result in tests.values()), "/", len(tests) ,"========== ")
+    # for key, value in tests.items():
+    #     if(value != True and (value == False or "False" in value)):
+    #         #print(color.BOLD, key, ":", value, color.END)
+    #     else: 
+    #         #print(key, ":", value)
+    # #print(" ========== Fin Tests ========== ")
 
 ##########################  EJECUCION DEL JUEGO  #############################################
 
 def runProduccion():
     global ambienteProduccion   
     ambienteProduccion = True
-    print(imagen)
-    print(imagen2)
+    #print(imagen)
+    #print(imagen2)
     partida = Partida()
     partida.crear()
 
  
-if args.test:
-    runTests()
-else:
-    runProduccion()
+# if args.test:
+runTests()
+# else:
+#     runProduccion()
