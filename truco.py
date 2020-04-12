@@ -100,9 +100,9 @@ class Jugador:
     PuntajeRonda: int = 0
     # - Crear una funcion MostrarCartas que muestres las cartas de la mano
     def mostrarCartas(self):
-        pass
         #print(self.Nombre)
         #print(self.Mano.Cartas)
+        pass
 
 @dataclass
 class Mano:
@@ -142,9 +142,9 @@ class Partida:
     
     # - Crear una funcion MostrarScore en la clase partida que muestre el score del jugador 1 y el score del jugador 2
     def mostrarscore(self):
-        pass
         #print("Puntuacion {}: {}".format(self.Jugador1.Nombre, self.PuntuacionJugador1))
         #print("Puntuacion {}: {}".format(self.Jugador2.Nombre, self.PuntuacionJugador2))
+        pass
   
     # - Crear una ronda
     def crearronda(self) -> "Ronda":
@@ -241,10 +241,10 @@ class EvaluacionCarta:
                     
 
             
-            elif(cartaJugMano < cartaJugNoMano):
+            elif(cartaJugMano < cartaJugNoMano):# Gana jugador B
                 jugadorNoMano.PuntajeRonda += 1
                 if(jugadorNoMano.PuntajeRonda >= 1.5):
-                    self.GanadorRonda = jugadorNoMano # Gana jugador B
+                    self.GanadorRonda = jugadorNoMano 
                 else:
                     self.GanadorMano = jugadorNoMano
                     self.ManoSiguienteTurno = jugadorNoMano
@@ -304,7 +304,7 @@ class Ronda:
             for _ in range(3):
                 jugador1.Mano.Cartas.append(self.repartir()) # Le doy 1 carta al jugador 1
                 jugador2.Mano.Cartas.append(self.repartir()) # Le doy 1 carta al jugador 2
-        
+
         # mostar todas las cartas de cada jugador
         jugador1.mostrarCartas() # las 3 cartas del jugador 1
         jugador2.mostrarCartas() # las tres cartas del jugador 2
@@ -400,8 +400,9 @@ class Ronda:
         carta = choice(self.Mazo.Cartas)
         self.Mazo.Cartas.remove(carta)
         if(carta in self.Mazo.Cartas):
-            pass
             #print("Error, la carta repartida esta duplicada en el mazo o no fue removida. Carta: {}".format(carta))
+            pass
+
 
         return carta
         
@@ -410,13 +411,13 @@ class Ronda:
         carta = choice(self.Mazo.Cartas)
         self.Mazo.Cartas.remove(carta)
         return carta
-        ##print("Carta {}".format(self.carta))
+        #print("Carta {}".format(self.carta))
     
     def repartirJugador2(self):
         carta = choice(self.Mazo.Cartas)
         self.Mazo.Cartas.remove(carta)
         return carta
-        ##print("Carta {}".format(self.carta))
+        #print("Carta {}".format(self.carta))
 
 @dataclass
 class Turno:
@@ -551,6 +552,12 @@ def ejecutarTestGanaNoMano(coleccionDeCasos):
         if not testGanaNoMano(x[0], x[1]):
             print("fallo gano No mano",x[0], x[1])
 
+def EsCasoExcepcionNoMano(i,j):
+    return i[0] > j[0] and i[1] < j[1] and i[2] < j[2] # te devuelve true si se da eso, es decir, si i gana primera, pero pierde las otras dos entonces pierde.
+
+def EsCasoExcepcionMano(i,j):
+    return i[0] < j[0] and i[1] > j[1] and i[2] > j[2]
+
 def runTests():
     global ambienteProduccion
     ambienteProduccion = False
@@ -576,17 +583,18 @@ def runTests():
     testsGanaNoMano = []
     for i in colección:
         for j in colección:
-            if j <= i: 
+            if EsCasoExcepcionNoMano(i,j) and (j <= i or EsCasoExcepcionMano(i,j)): 
                 # aca encontro un conjunto de cartas, i es las cartas de mano y j las del no mano
                 # la idea es guardar ese conjunto de cartas en una variable
                 # creo que al final no sirve la coleccionDosD
                 testsGanaMano.append([i,j]) # i NO ES UN ARRAY, es el indice, entonces i = 0 y j = 0 es la primer celda. Si j <= 0 entonces es que la celda es de la diagonal para abajo, si j>i entonces es la diagonal hacia arriba (sin contar la celda de la diagonal) # aca si tengo que usar coleccionDosD, antes de saber que la necesitaba la cree por las dudas
             else:
-                testsGanaNoMano.append([i,j]) # creo que es asi jajaj.
+                testsGanaNoMano.append([i,j])
     
-    #print(" ========== Tests ==========")
-    print("testsGanaMano:", len(testsGanaMano))
-    print("testsGanaNoMano:", len(testsGanaNoMano))
+    #print(" ========== Tes
+    # ts ==========")
+    #print("testsGanaMano:", len(testsGanaMano))
+    #print("testsGanaNoMano:", len(testsGanaNoMano))
     ejecutarTestGanaMano(testsGanaMano)
     ejecutarTestGanaNoMano(testsGanaNoMano)
     #print(" ========== Fin Tests ==========")
@@ -615,7 +623,7 @@ def runProduccion():
     partida.crear()
 
  
-# if args.test:
-runTests()
-# else:
-#     runProduccion()
+if args.test:
+    runTests()
+else:
+    runProduccion()

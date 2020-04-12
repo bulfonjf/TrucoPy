@@ -1,0 +1,11 @@
+        [0,0,0][0,0,1][0,0,2][0,1,0][0,1,1][0,1,2][1,0,0][0,2,1][0,2,2][1,0,0]
+[0,0,0] M
+[0,0,1]         M
+[0,0,2]                 M
+[0,1,0]                         M
+[0,1,1]                                 M                                  2 => ahh no, pq el no mano gana primera, pero desp pierde. Que suerte que son 54 no mas. O habra falsos positivos?
+[0,1,2]                                       M
+[0,2,0]                                             M
+[0,2,1]                                                     M    
+[0,2,2]                                                            M
+[1,0,0]                                 X      X            X      X       M
