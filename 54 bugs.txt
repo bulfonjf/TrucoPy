@@ -1,4 +1,4 @@
-fallo gano mano [1, 0, 0] [0, 1, 1]
+fallo gano mano [1, 0, 0] [0, 1, 1] gana primera mano, y pierde las otras dos. Son todos iguales
 fallo gano mano [1, 0, 0] [0, 1, 2]
 fallo gano mano [1, 0, 0] [0, 2, 1]
 fallo gano mano [1, 0, 0] [0, 2, 2]
@@ -25,6 +25,7 @@ fallo gano mano [2, 1, 0] [1, 2, 1]
 fallo gano mano [2, 1, 0] [1, 2, 2]
 fallo gano mano [2, 1, 1] [0, 2, 2]
 fallo gano mano [2, 1, 1] [1, 2, 2]
+
 fallo gano No mano [0, 1, 1] [1, 0, 0]
 fallo gano No mano [0, 1, 1] [2, 0, 0]
 fallo gano No mano [0, 1, 2] [1, 0, 0]
