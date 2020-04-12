@@ -38,12 +38,9 @@ from random import sample, choice
 from enum import IntEnum
 import argparse
 
-# parser = argparse.ArgumentParser(description='Juego Truco, Peron vs Evita.')
-# parser.add_argument('--test', metavar='modo test', type=str, help='ejecuta los tests automaticos')
-# args = parser.parse_args()
-# print(args)
-
-ambienteProduccion = True
+parser = argparse.ArgumentParser(description='Juego Truco, Peron vs Evita.')
+parser.add_argument('--test', action='store_true', help='ejecuta los tests automaticos')
+args = parser.parse_args()
 
 class EstadoTruco(IntEnum):
     nosecanto = 1
@@ -453,12 +450,6 @@ class color:
    UNDERLINE = '\033[4m'
    END = '\033[0m'
 
-
-##########################  EJECUCION DEL JUEGO  #############################################
-
-
-
-# Partida
 imagen = r"""#####Ql,VBBB########################BBBBBBB##########BBBB#BBBBBBBBBBQ
 #####~ "rQj Q#########################################BBB#B#BBQV]QQBQ
 ###O``rwr^(_#########################################BBBB###Bl   rQBQ
@@ -487,12 +478,8 @@ imagen2 = r"""/__   \_ __ _   _  ___ ___     / _ \___ _ __ ___  _ __ (_)___| |_ 
   / /\/ '__| | | |/ __/ _ \   / /_)/ _ \ '__/ _ \| '_ \| / __| __/ _` |
  / /  | |  | |_| | (_| (_) | / ___/  __/ | | (_) | | | | \__ \ || (_| |
  \/   |_|   \__,_|\___\___/  \/    \___|_|  \___/|_| |_|_|___/\__\__,_|"""
- 
-print(imagen)
-print(imagen2)
-# partida = Partida()
 
-# partida.crear()
+##########################  TESTS  #############################################
 
 def testingSeguro(testACorrer):
     try:
@@ -502,8 +489,6 @@ def testingSeguro(testACorrer):
         return "False, {}".format(err)
 
 def testing1GanaPeron():
-    global ambienteProduccion
-    ambienteProduccion = False
     manoDePeron = Mano([Carta(2, "Uno de", "Espada"), Carta(2, "Uno de", "Palo"), Carta(2, "Siete de", "Espada") ])
     manoDeEvita = Mano([Carta(1, "Espada", "Dos de"),Carta(2, "Espada", "Tres de"), (2, "Oro", "Seis de")])
     peron = Jugador("peron", "nacionalsocialista", manoDePeron)
@@ -513,8 +498,6 @@ def testing1GanaPeron():
     return partida.Rondas[0].GanadorRonda == peron
 
 def testing2GanaElSegundo():
-    global ambienteProduccion
-    ambienteProduccion = False
     manoDePeron = Mano([Carta(1, "Uno de", "Espada"), Carta(1, "Uno de", "Palo"), Carta(2, "Siete de", "Espada") ])
     manoDeEvita = Mano([Carta(2, "Espada", "Dos de"),Carta(2, "Espada", "Tres de"), (2, "Oro", "Seis de")])
     peron = Jugador("peron", "nacionalsocialista", manoDePeron)
@@ -524,8 +507,6 @@ def testing2GanaElSegundo():
     return partida.Rondas[0].GanadorRonda == evita # devuelve true si el test da exito o false si fallo
 
 def testing3EmpatePrimeraYGanaElPrimero():
-    global ambienteProduccion
-    ambienteProduccion = False
     manoDePeron = Mano([Carta(1, "Uno de", "Espada"), Carta(2, "Uno de", "Palo"), Carta(2, "Siete de", "Espada") ])
     manoDeEvita = Mano([Carta(1, "Espada", "Dos de"),Carta(1, "Espada", "Tres de"), (2, "Oro", "Seis de")])
     peron = Jugador("peron", "nacionalsocialista", manoDePeron)
@@ -534,23 +515,34 @@ def testing3EmpatePrimeraYGanaElPrimero():
     partida.crearTesting(peron, evita)
     return partida.Rondas[0].GanadorRonda == peron # devuelve true si el test da exito o false si fallo
 
-tests = {
-    testing1GanaPeron.__name__: testingSeguro(testing1GanaPeron),
-    testing2GanaElSegundo.__name__: testingSeguro(testing2GanaElSegundo),
-    testing3EmpatePrimeraYGanaElPrimero.__name__: testingSeguro(testing3EmpatePrimeraYGanaElPrimero),
-}
+def runTests():
+    global ambienteProduccion
+    ambienteProduccion = False
+    tests = {
+        testing1GanaPeron.__name__: testingSeguro(testing1GanaPeron),
+        testing2GanaElSegundo.__name__: testingSeguro(testing2GanaElSegundo),
+        testing3EmpatePrimeraYGanaElPrimero.__name__: testingSeguro(testing3EmpatePrimeraYGanaElPrimero),
+    }
+    print(" ========== Tests con exito", sum(result == True for result in tests.values()), "/", len(tests) ,"========== ")
+    for key, value in tests.items():
+        if(value != True and (value == False or "False" in value)):
+            print(color.BOLD, key, ":", value, color.END)
+        else: 
+            print(key, ":", value)
+    print(" ========== Fin Tests ========== ")
 
-print(" ========== Tests con exito", sum(result == True for result in tests.values()), "/", len(tests) ,"========== ")
-for key, value in tests.items():
-    if(value != True and (value == False or "False" in value)):
-        print(color.BOLD, key, ":", value, color.END)
-    else: 
-        print(key, ":", value)
-print(" ========== Fin Tests ========== ")
+##########################  EJECUCION DEL JUEGO  #############################################
 
+def runProduccion():
+    global ambienteProduccion   
+    ambienteProduccion = True
+    print(imagen)
+    print(imagen2)
+    partida = Partida()
+    partida.crear()
 
-#el jugador 1 gana en las siguientes situaciones
-
-# for x in range (3):
-# manop() () ()
-# manoe() () ()
+ 
+if args.test:
+    runTests()
+else:
+    runProduccion()
