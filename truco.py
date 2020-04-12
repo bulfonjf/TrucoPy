@@ -583,11 +583,14 @@ def runTests():
     testsGanaNoMano = []
     for i in colección:
         for j in colección:
-            if EsCasoExcepcionNoMano(i,j) and (j <= i or EsCasoExcepcionMano(i,j)): 
+            if j <= i or EsCasoExcepcionMano(i,j): 
                 # aca encontro un conjunto de cartas, i es las cartas de mano y j las del no mano
                 # la idea es guardar ese conjunto de cartas en una variable
                 # creo que al final no sirve la coleccionDosD
-                testsGanaMano.append([i,j]) # i NO ES UN ARRAY, es el indice, entonces i = 0 y j = 0 es la primer celda. Si j <= 0 entonces es que la celda es de la diagonal para abajo, si j>i entonces es la diagonal hacia arriba (sin contar la celda de la diagonal) # aca si tengo que usar coleccionDosD, antes de saber que la necesitaba la cree por las dudas
+                if EsCasoExcepcionNoMano(i,j):
+                    testsGanaNoMano.append([i,j])
+                else:
+                    testsGanaMano.append([i,j]) # i NO ES UN ARRAY, es el indice, entonces i = 0 y j = 0 es la primer celda. Si j <= 0 entonces es que la celda es de la diagonal para abajo, si j>i entonces es la diagonal hacia arriba (sin contar la celda de la diagonal) # aca si tengo que usar coleccionDosD, antes de saber que la necesitaba la cree por las dudas
             else:
                 testsGanaNoMano.append([i,j])
     
